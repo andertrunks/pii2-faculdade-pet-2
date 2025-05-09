@@ -1,0 +1,637 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins%3Awght%40100%3B200%3B300%3B400%3B500%3B600&display=swap%27%29%3B");
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+}
+
+html {
+  font-size: 62.5%;
+  scroll-behavior: smooth;
+}
+
+body {
+  width: 100%;
+  height: 100vh;
+  background-color: #fff;
+  color: #000000;
+  justify-content: center;
+  align-items: center;
+}
+
+/* -- CSS INDEX INICIO --*/
+header{
+  margin-top: 20px;
+  position: static;
+  top: 0;
+  left: 0;
+  width: 100%;
+  padding: 1rem 9%;
+  background-color: transparent;
+  filter: drop-shadow(10px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 100;
+}
+
+.logo{
+  font-size: 3rem;
+  color: #ca6512;
+  font-weight: 800;
+  cursor: pointer;
+  transition: 0.5s ease;
+}
+
+.logo:hover{
+  transform: scale(1.1);
+}
+
+nav a{
+  font-size: 1.8rem;
+  color: #000000;
+  margin-left: 4rem;
+  font-weight: 500;
+  transition: 0.3s ease;
+  border-bottom: 3px solid transparent;
+}
+
+nav a:hover,
+nav a.active{
+  color: #ca6512;
+  border-bottom: 3px solid #ca6512;
+}
+
+@media(max-width:995px){
+  nav{
+    position: absolute;
+    display: none;
+    top: 100%;
+    right: 0;
+    width: 40%;
+    border-left: 3px solid #ca6512;
+    border-bottom: 3px solid #ca6512;
+    border-bottom-left-radius: 2rem;
+    padding: 1rem solid;
+    background-color: #000000;
+    border-top: 0.1rem solid rgba(0,0,0,0.1);
+  }
+
+  nav.active{
+    display: block;
+  }
+
+  nav a{
+    display: block;
+    font-size: 2rem;
+    margin: 3rem 0;
+  }
+
+  nav a:hover,
+  nav a.active{
+   padding: 1rem;
+    border-radius: 0.5rem;
+    border-bottom: 0.5rem solid #9f2ae2;
+  }
+}
+
+/*  CARROSSEL */
+section {
+  height: 65vh;
+  padding: 5rem 9% 5rem;
+  position: relative;
+
+  & .list {
+      width: 70vw;
+      height: 100%;
+      margin: auto;
+      position: relative;
+
+      & .item {
+          position: absolute;
+          inset: 0;
+
+          & .animal-img {
+              position: absolute;
+              top: 50%;
+              transform: translateY(-50%);
+              width: 70%;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+
+              & img {
+                  width: 50%;
+              }
+          }
+
+          & .content {
+              position: absolute;
+              right: 100px;
+              width: 70%;
+              height: 100%;
+              display: flex;
+              flex-direction: column;
+              justify-content: center;
+              align-items: end;
+              gap: 50px;
+
+              & .animal-information {
+                  font-weight: bold;
+              }
+
+              & h2 {
+                  font-size: 5em;
+                  line-height: 1em;
+                  font-family: 'Poppins', sans-serif;
+              }
+
+              & .description {
+                  color: #000000;
+                  font-size: 12px;
+                  text-align: right;
+                  max-width: 400px;
+              }
+
+              & .information {
+                  border-radius: 30px;
+                  height: 35px;
+                  width: 120px;
+                  text-transform: uppercase;
+                  border: 2px solid #ca6512;
+                  background-color: #fff;
+                  color: #ca6512;
+                  cursor: pointer;
+                  font-weight: bold;
+                  font-family: 'Poppins', sans-serif;
+              }
+          }
+
+      }
+
+      &::before {
+          content: '';
+          position: absolute;
+          height: 200px;
+          width: 100%;
+          top: 50%;
+          border-top: 1px solid #000000;
+      }
+  }
+
+  .arrows {
+      width: 70vw;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -25px);
+      display: flex;
+      justify-content: space-between;
+
+      & button:nth-child(1) {
+          & img {
+              transform: scale(-1);
+          }
+      }
+
+      & button {
+          top: 60%;
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          border: none;
+          cursor: pointer;
+
+          & img {
+              width: 30px;
+              margin-top: 4px;
+              cursor: pointer;
+          }
+
+          &:hover {
+              background-color: #df8740;
+          }
+      }
+  }
+
+  .indicators {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translateX(-50%);
+      height: 200px;
+      width: 90vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: end;
+      gap: 15px;
+
+      & .number {
+          font-size: 5em;
+          font-family: "League Gothic", sans-serif;
+      }
+
+      & ul {
+          display: flex;
+          gap: 10px;
+
+          & li {
+              width: 50px;
+              height: 5px;
+              background-color: #ca6512;
+              border-radius: 5px;
+              transition: 0.5s;
+              list-style-type: none;
+          }
+
+          & .active {
+              background-color: #e7af81;
+          }
+      }
+  }
+}
+
+section {
+
+  & .list {
+  --calculation: 1;
+  
+      & .item {
+          transform: translateX(calc(100vw * var(--calculation)));
+          transition: 0.5s;
+          opacity: 0;
+
+          & .animal-img {
+              & img {
+                  transform: rotate(0);
+                  transition: 0.5s;
+                  transition-delay: 0.3s;
+              }
+          }
+
+          & .content {
+
+              & .animal-information,
+              h2,
+              .description,
+              .information {
+                  transform: translateX(calc(200px * var(--calculation)));
+                  transition: 0.7s;
+                  transition-delay: 0.3s;
+                  opacity: 0;
+              }
+
+              & h2 {
+                  transition-delay: 0.5s;
+              }
+
+              & .description {
+                  transition-delay: 0.7s;
+              }
+
+              & .information {
+                  transition-delay: 0.9s;
+              }
+
+          }
+      }
+
+      & .active {
+          transform: translateX(0);
+          transition: 0.5s;
+          opacity: 1;
+
+          & .content {
+
+              & .animal-information,
+              h2,
+              .description,
+              .information {
+                  transform: translateX(0);
+                  opacity: 1;
+              }
+          }
+      }
+  }
+}
+
+/* FORM */
+#form_container{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 32px;
+  height: 100%;
+  background-color: #fff;
+  padding: 90px;
+  border-radius: 8px;
+  font-size: 17px;
+  background-color: #f0eeed;
+}
+
+#form_header{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#form_title{
+  font-weight: 500;
+  color: #222;
+  position: relative;
+}
+
+#form_title::after{
+  content: ' ';
+  position: absolute;
+  width: 100px;
+  height: 3px;
+  border-radius: 30px;
+  background-color: #ca6512;
+  left: 0;
+  bottom: 0;
+}
+
+.btn-default{
+  background-color: #ca6512;
+    color: #fff;
+    font-size: 12px;
+    padding: 10px 45px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-top: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-items: center;
+}
+
+.btn-default:hover{
+  background-color: #8d4509;
+}
+
+#form{
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  gap: 32px;
+  height: 100%;
+}
+
+#input_container{
+  display: grid ;
+  grid-template-columns: 400px 400px;
+  gap: 24px;
+}
+
+.form-label{
+  font-size: 17px;
+  color: #404044;
+  font-weight: 500;
+}
+
+.input-field{
+  display: flex;
+  align-items: center;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 10px 15px -3px rgba(0,0,0,0.1);
+}
+
+.input-field i{
+  display: flex;
+  align-items: center;
+  width: 50px;
+  height: 50px;
+  color: #404044;
+}
+
+.form-control{
+  padding: 10px;
+  width: 100%;
+  border: none;
+  border-radius: 8px;
+}
+
+.form-control:focus{
+  outline: none;
+}
+
+.input-box .input-field:focus-within{
+  outline: 2px solid #ca6512;
+}
+
+input:-webkit-autofill{
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
+  color: #000000;
+}
+
+/* BANNER ADOTE */
+#adote{
+  display: flex;
+  justify-content:center;
+  flex-wrap: wrap;
+  align-items: center;
+  background-image: url(../img/pets.png);
+  background-repeat: no-repeat;
+  background-color: #df8740;
+  background-position: 10% 20%;
+  height: 40vh;
+  background-size: 25%;
+}
+
+#adote h4{
+  font-size: 22px;
+  font-weight: 700;
+  color: #fff;
+}
+
+#adote p{
+  font-size: 14px;
+  font-weight: 600;
+  color: #000000;
+}
+
+.section-p1 {
+  padding: 10px 90px;
+}
+
+
+/* FOOTER */
+footer{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+footer .col{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 20px;
+}
+
+footer .logo{
+  margin-bottom: 30px;
+}
+
+footer h4{
+  font-size: 14px;
+  padding-bottom: 20px;
+}
+
+footer p{
+  font-size: 13px;
+  margin: 0 0 8px 0;
+}
+
+footer a{
+  font-size: 13px;
+  text-decoration: none;
+  color: #222;
+  margin-bottom: 10px;
+}
+
+footer .follow{
+  margin-top: 20px;
+}
+
+footer .follow i{
+  color: #465b52;
+  padding-right: 4px;
+  cursor: pointer;
+}
+
+footer .follow i:hover,
+footer a:hover{
+  color: #088178;
+}
+
+footer .copyright{
+  width: 100%;
+  text-align: center;
+}
+
+/* -- CSS ACESSIBILIDADE -- */
+
+.trilho{
+  width: 50px;
+  height: 20px;
+  background-color: #c3c3c3;
+  align-items: end;
+  border-radius: 150px;
+  position: relative;
+  cursor: pointer;
+}
+
+.trilho .indicador{
+  width: 19px;
+  height: 19px;
+  background-color: #fff;
+  border-radius: 50%;
+  transform: scale(.9);
+  position: absolute;
+  left: 0;
+  transition: .5s;
+}
+
+.trilho.light{
+  background-color: #000000;
+}
+
+.trilho.light .indicador{
+  left: 30px;
+  background-color: #4d4d4d;
+}
+
+body.light #form_container{
+  background-color: #222;
+}
+
+body.light{
+  background-color: #222;
+}
+
+.home.light{
+  background-color: #222;
+}
+
+body.light a{
+  color: #fff;
+}
+
+body.light h1{
+  color: #fff;
+}
+
+.home.light h3{
+  color: #fff;
+}
+
+.home.light p{
+  color: #fff;
+}
+
+.home.light .btn{
+  background-color: #4d4d4d;
+}
+
+.home.light span::after{
+  background-color: #222;
+}
+
+body.light p{
+  color: #fff;
+}
+
+body.light #form_container h1{
+  color: #fff;
+}
+
+body.light #form_container label{
+  color: #fff;
+}
+
+body.light h2{
+  color: #fff;
+}
+
+body.light h4{
+  color: #fff;
+}
+
+body.light i{
+  color: #fff;
+}
+
+body.light .number{
+  color: #fff;
+}
+
+body.light section {
+  & .list {
+      & .item {
+          & .content {
+              & .information {
+                background-color: #4d4d4d;
+              }
+              & .description{
+                color: #fff;
+              }
+            }
+        }
+        &::before {
+          content: '';
+          position: absolute;
+          height: 200px;
+          width: 100%;
+          top: 50%;
+          border-top: 1px solid #fff;
+      }
+    }
+}
