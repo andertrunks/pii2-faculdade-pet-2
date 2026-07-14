@@ -1,52 +1,52 @@
 <?php
-include('conexao.php');
+require 'conexao.php';
 
-$hidden = $_POST['hidden'];
-
-if($hidden == 1) {
-    $name = $_POST['name'];
-    $email = $_POST['email'];
-    $password = $_POST['password'];
-    $cep = $_POST['cep'];
-    $rua = $_POST['rua'];
-    $city = $_POST['cidade'];
-    $uf = $_POST['uf'];
-
-   try {
-    $sql = "INSERT INTO cadastro (name, email, password, cep, rua, cidade, uf) 
-            VALUES ('$name', '$email', '$password', '$cep', '$rua', '$cidad', '$uf')";
-    $pdo->exec($sql); // Executa a inserção
-
-    header("Location: inicio.php");
-
-   } catch (PDOException $e) {
-        if ($e->getCode() == 23000) { // Código de erro para violação de índice único
-            echo "Erro no cadastro: Email já cadastrado.";
-        } else {
-            echo "Erro no cadastro: " . $e->getMessage(); // Outros erros
-        }
-    }
-
-} else {
-    $email = $_POST['email'];
-    $password = $_POST['senha'];
-
-    $sql = "SELECT * FROM cadastro";
-
-    $query = mysqli_query($conexao, $sql);
-
-    if(mysqli_num_rows($query) > 0) {
-        while(($cadastro = mysqli_fetch_assoc($query)) != NULL) {
-            if((($email == $cadastro['email']) && ($email == "admin@admin.com")) && (($password == $cadastro['password']) && ($password == "123456789"))){
-                setcookie('ADM', 1, time()+600);
-                header("Location: area_admin.php");
-            } else if(($email == $cadastro['email']) && ($password == $cadastro['password'])){
-                setcookie('USER', $cadastro['id_cadastro'], time()+600);
-                header("Location: inicio.php");
-            }
-        }
-    }
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    http_response_code(405);
+    exit('Método não permitido.');
 }
 
+$hidden = filter_input(INPUT_POST, 'hidden', FILTER_VALIDATE_INT);
+if ($hidden !== 1) {
+    http_response_code(400);
+    exit('Operação inválida.');
+}
 
-?>
+$name = trim($_POST['name'] ?? '');
+$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+$password = $_POST['password'] ?? '';
+$cep = trim($_POST['cep'] ?? '');
+$rua = trim($_POST['rua'] ?? '');
+$cidade = trim($_POST['cidade'] ?? '');
+$uf = strtoupper(trim($_POST['uf'] ?? ''));
+
+if ($name === '' || $email === false || strlen($password) < 8) {
+    http_response_code(422);
+    exit('Preencha os dados corretamente. A senha deve ter pelo menos 8 caracteres.');
+}
+
+try {
+    $sql = $pdo->prepare(
+        'INSERT INTO cadastro (name, email, password, cep, rua, cidade, uf)
+         VALUES (:name, :email, :password, :cep, :rua, :cidade, :uf)'
+    );
+    $sql->execute([
+        'name' => $name,
+        'email' => $email,
+        'password' => password_hash($password, PASSWORD_DEFAULT),
+        'cep' => $cep,
+        'rua' => $rua,
+        'cidade' => $cidade,
+        'uf' => $uf,
+    ]);
+    header('Location: inicio.php');
+    exit;
+} catch (PDOException $e) {
+    if ((string) $e->getCode() === '23000') {
+        http_response_code(409);
+        exit('Erro no cadastro: email já cadastrado.');
+    }
+    error_log('Erro no cadastro: ' . $e->getMessage());
+    http_response_code(500);
+    exit('Não foi possível concluir o cadastro.');
+}
