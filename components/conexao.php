@@ -13,6 +13,7 @@ try {
     $pdo = new PDO("mysql:dbname={$database};host={$localhost}", $user, $pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
-    echo "ERRO: ".$e->getMessage();
-    exit;
+    error_log('Falha na conexão com o banco: ' . $e->getMessage());
+    http_response_code(500);
+    exit('Não foi possível conectar ao banco de dados.');
 }
