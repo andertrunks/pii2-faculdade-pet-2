@@ -1,43 +1,47 @@
 <?php
 
-class Usuario {
+class Usuario
+{
+    public function login($email, $password)
+    {
+        global $pdo;
 
-  public function login($email, $password){
-    global $pdo;
+        $sql = $pdo->prepare('SELECT id_cadastro, password FROM cadastro WHERE email = :email LIMIT 1');
+        $sql->execute(['email' => $email]);
+        $dado = $sql->fetch(PDO::FETCH_ASSOC);
 
-    $sql = "SELECT * FROM cadastro WHERE email = :email AND password = :password";
-    $sql = $pdo->prepare($sql);
-    $sql->bindValue("email", $email);
-    $sql->bindValue("password", $password); 
-    $sql->execute();
+        if (!$dado) {
+            return false;
+        }
 
-    if($sql->rowCount() > 0){
-        $dado = $sql->fetch();
+        $hash = (string) $dado['password'];
+        $senhaValida = password_verify($password, $hash);
 
+        // Migra de forma transparente os cadastros antigos que usavam texto puro.
+        if (!$senhaValida && hash_equals($hash, (string) $password)) {
+            $senhaValida = true;
+            $update = $pdo->prepare('UPDATE cadastro SET password = :password WHERE id_cadastro = :id');
+            $update->execute([
+                'password' => password_hash($password, PASSWORD_DEFAULT),
+                'id' => $dado['id_cadastro'],
+            ]);
+        }
+
+        if (!$senhaValida) {
+            return false;
+        }
+
+        session_regenerate_id(true);
         $_SESSION['id_cadastro'] = $dado['id_cadastro'];
-
         return true;
-    }else{
-        return false;
     }
-  }
 
-  public function logado($cod){
-      global $pdo;
+    public function logado($cod)
+    {
+        global $pdo;
 
-      $array = array();
-
-      $sql = "SELECT name FROM cadastro WHERE id_cadastro = :id_cadastro";
-      $sql = $pdo->prepare($sql);
-      $sql->bindValue("id_cadastro", $cod);
-      $sql->execute();
-
-      if($sql->rowCount() > 0){
-          $array = $sql->fetch();
-      }
-
-      return $array;
-  }
+        $sql = $pdo->prepare('SELECT name FROM cadastro WHERE id_cadastro = :id_cadastro');
+        $sql->execute(['id_cadastro' => $cod]);
+        return $sql->fetch(PDO::FETCH_ASSOC) ?: [];
+    }
 }
-
-?>
