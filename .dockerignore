@@ -1,0 +1,7 @@
+.git
+.github
+.env
+tests
+README.md
+*.docx
+*.log

@@ -1,36 +1,34 @@
 <?php
-require 'conexao.php';
 
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    http_response_code(405);
-    exit('Método não permitido.');
-}
+declare(strict_types=1);
 
-$hidden = filter_input(INPUT_POST, 'hidden', FILTER_VALIDATE_INT);
-if ($hidden !== 1) {
-    http_response_code(400);
-    exit('Operação inválida.');
-}
+require_once __DIR__ . '/conexao.php';
 
-$name = trim($_POST['name'] ?? '');
-$email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
-$password = $_POST['password'] ?? '';
-$cep = trim($_POST['cep'] ?? '');
-$rua = trim($_POST['rua'] ?? '');
-$cidade = trim($_POST['cidade'] ?? '');
-$uf = strtoupper(trim($_POST['uf'] ?? ''));
-
-if ($name === '' || $email === false || strlen($password) < 8) {
-    http_response_code(422);
-    exit('Preencha os dados corretamente. A senha deve ter pelo menos 8 caracteres.');
-}
+require_post_request();
+require_valid_csrf();
 
 try {
-    $sql = $pdo->prepare(
+    if (filter_var($_POST['hidden'] ?? null, FILTER_VALIDATE_INT) !== 1) {
+        throw new InvalidArgumentException('Operação inválida.');
+    }
+
+    $name = post_string('name', 120, 2);
+    $email = post_email();
+    $password = post_password(8);
+    $cep = preg_replace('/\D+/', '', post_string('cep', 12, 8));
+    $rua = post_string('rua', 160, 2);
+    $cidade = post_string('cidade', 120, 2);
+    $uf = strtoupper(post_string('uf', 2, 2));
+
+    if (strlen($cep) !== 8 || !preg_match('/^[A-Z]{2}$/', $uf)) {
+        throw new InvalidArgumentException('Dados de cadastro inválidos.');
+    }
+
+    $statement = $pdo->prepare(
         'INSERT INTO cadastro (name, email, password, cep, rua, cidade, uf)
          VALUES (:name, :email, :password, :cep, :rua, :cidade, :uf)'
     );
-    $sql->execute([
+    $statement->execute([
         'name' => $name,
         'email' => $email,
         'password' => password_hash($password, PASSWORD_DEFAULT),
@@ -39,14 +37,15 @@ try {
         'cidade' => $cidade,
         'uf' => $uf,
     ]);
-    header('Location: inicio.php');
-    exit;
-} catch (PDOException $e) {
-    if ((string) $e->getCode() === '23000') {
-        http_response_code(409);
-        exit('Erro no cadastro: email já cadastrado.');
+
+    redirect_with_flash('login.php', 'success', 'Cadastro concluído. Entre com seu email e senha.');
+} catch (InvalidArgumentException) {
+    redirect_with_flash('login.php', 'error', 'Revise os campos. Use um email válido e uma senha com pelo menos 8 caracteres.');
+} catch (PDOException $exception) {
+    if (is_unique_violation($exception)) {
+        redirect_with_flash('login.php', 'error', 'Este email já está cadastrado.');
     }
-    error_log('Erro no cadastro: ' . $e->getMessage());
-    http_response_code(500);
-    exit('Não foi possível concluir o cadastro.');
+
+    error_log('Erro no cadastro: ' . $exception->getMessage());
+    redirect_with_flash('login.php', 'error', 'Não foi possível concluir o cadastro agora.');
 }

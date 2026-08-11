@@ -1,0 +1,34 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      DB_DRIVER: mysql
+      DB_HOST: database
+      DB_PORT: 3306
+      DB_NAME: ${DB_NAME:-adota_pet}
+      DB_USER: ${DB_USER:-adota_pet}
+      DB_PASS: ${DB_PASS:-adota_pet_dev}
+    depends_on:
+      database:
+        condition: service_healthy
+
+  database:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: ${DB_NAME:-adota_pet}
+      MYSQL_USER: ${DB_USER:-adota_pet}
+      MYSQL_PASSWORD: ${DB_PASS:-adota_pet_dev}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS:-root_dev_only}
+    volumes:
+      - adota_pet_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-p${DB_ROOT_PASS:-root_dev_only}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  adota_pet_mysql:

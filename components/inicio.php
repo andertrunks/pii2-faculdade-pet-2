@@ -1,3 +1,4 @@
+<?php require_once __DIR__ . '/verifica.php'; ?>
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
@@ -27,6 +28,7 @@
         <a href="adote2.html"> Quero Adotar </a>
         <a href="doar.php"> Quero Doar </a>
         <a href="denuncia.php"> Denuncia </a>
+        <a href="logout.php"> Sair </a>
       </nav>
       <div class="trilho" id="trilho">
         <div class="indicador"></div>
@@ -45,7 +47,7 @@
         <li class="li-index"> Denuncie maus-tratos: Não se cale, proteja os animais e garanta que os responsáveis sejam punidos.</li>
         <li class="li-index"> Apoie ONGs: Conheça o trabalho das ONGs de proteção animal e ajude a salvar vidas.</li>
         <div class="social-icons">
-          <a href="linkedin.com/in/ana-júlia-simão-nunes-93558820b/"><i class="fa-brands fa-linkedin"></i></a>
+          <a href="https://www.linkedin.com/in/ana-júlia-simão-nunes-93558820b/"><i class="fa-brands fa-linkedin"></i></a>
           <a href="https://github.com/AnaJuliaN"><i class="fa-brands fa-github"></i></a>
           <a href="https://www.instagram.com/archv.naju/"><i class="fa-brands fa-instagram"></i></a>
         </div>

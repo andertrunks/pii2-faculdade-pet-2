@@ -1,47 +1,59 @@
 <?php
 
-class Usuario
+declare(strict_types=1);
+
+final class Usuario
 {
-    public function login($email, $password)
+    public function __construct(private PDO $pdo)
     {
-        global $pdo;
+    }
 
-        $sql = $pdo->prepare('SELECT id_cadastro, password FROM cadastro WHERE email = :email LIMIT 1');
-        $sql->execute(['email' => $email]);
-        $dado = $sql->fetch(PDO::FETCH_ASSOC);
+    public function login(string $email, string $password): bool
+    {
+        $statement = $this->pdo->prepare(
+            'SELECT id_cadastro, password FROM cadastro WHERE email = :email LIMIT 1'
+        );
+        $statement->execute(['email' => strtolower(trim($email))]);
+        $user = $statement->fetch();
 
-        if (!$dado) {
+        if (!$user) {
             return false;
         }
 
-        $hash = (string) $dado['password'];
-        $senhaValida = password_verify($password, $hash);
+        $storedPassword = (string) $user['password'];
+        $passwordInfo = password_get_info($storedPassword);
+        $isHash = ($passwordInfo['algoName'] ?? 'unknown') !== 'unknown';
+        $isValid = $isHash
+            ? password_verify($password, $storedPassword)
+            : hash_equals($storedPassword, $password);
 
-        // Migra de forma transparente os cadastros antigos que usavam texto puro.
-        if (!$senhaValida && hash_equals($hash, (string) $password)) {
-            $senhaValida = true;
-            $update = $pdo->prepare('UPDATE cadastro SET password = :password WHERE id_cadastro = :id');
+        if (!$isValid) {
+            return false;
+        }
+
+        if (!$isHash || password_needs_rehash($storedPassword, PASSWORD_DEFAULT)) {
+            $update = $this->pdo->prepare(
+                'UPDATE cadastro SET password = :password WHERE id_cadastro = :id'
+            );
             $update->execute([
                 'password' => password_hash($password, PASSWORD_DEFAULT),
-                'id' => $dado['id_cadastro'],
+                'id' => $user['id_cadastro'],
             ]);
         }
 
-        if (!$senhaValida) {
-            return false;
-        }
-
         session_regenerate_id(true);
-        $_SESSION['id_cadastro'] = $dado['id_cadastro'];
+        $_SESSION['id_cadastro'] = (int) $user['id_cadastro'];
         return true;
     }
 
-    public function logado($cod)
+    public function findNameById(int $userId): ?string
     {
-        global $pdo;
+        $statement = $this->pdo->prepare(
+            'SELECT name FROM cadastro WHERE id_cadastro = :id_cadastro'
+        );
+        $statement->execute(['id_cadastro' => $userId]);
+        $name = $statement->fetchColumn();
 
-        $sql = $pdo->prepare('SELECT name FROM cadastro WHERE id_cadastro = :id_cadastro');
-        $sql->execute(['id_cadastro' => $cod]);
-        return $sql->fetch(PDO::FETCH_ASSOC) ?: [];
+        return $name === false ? null : (string) $name;
     }
 }

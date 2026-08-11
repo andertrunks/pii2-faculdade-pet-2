@@ -1,5 +1,11 @@
+<?php
+require_once __DIR__ . '/functions.php';
+start_secure_session();
+send_security_headers();
+$flash = flash_take();
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-BR">
 
 <head>
     <meta charset="UTF-8">
@@ -76,10 +82,12 @@
 
 <body>
   <a href="index.html" class="icon"><i class="fa-solid fa-circle-left"> Voltar </i></a>
+    <?= render_flash_message($flash) ?>
     <div class="container" id="container">
         <div class="form-container sign-up">
             <form action="efetuar_login.php" method="POST">
             <input type="hidden" name="hidden" value="1">
+            <input type="hidden" name="csrf_token" value="<?= escape_html(csrf_token()) ?>">
                 <h1>Cadastrar</h1>
                 <div class="social-icons">
                     <a href="#" class="icon"><i class="fa-brands fa-google-plus-g"></i></a>
@@ -87,19 +95,20 @@
                     <a href="#" class="icon"><i class="fa-brands fa-instagram"></i></a>
                 </div>
                 <span>ou use seu email</span>
-                <input type="text" name="name" placeholder="Nome">
-                <input type="email" name="email" placeholder="Email">
-                <input type="password" name="password" placeholder="Senha">
-                <input type="number" name="cep" id="cep" placeholder="CEP" onblur="pesquisacep(this.value);">
-                <input type="text" name="rua" id="rua" placeholder="Rua">
-                <input type="text" name="cidade" id="cidade" placeholder="Cidade">
-                <input type="text" name="uf" id="uf" placeholder="UF">
+                <input type="text" name="name" placeholder="Nome" autocomplete="name" maxlength="120" required>
+                <input type="email" name="email" placeholder="Email" autocomplete="email" maxlength="254" required>
+                <input type="password" name="password" placeholder="Senha (mínimo de 8 caracteres)" autocomplete="new-password" minlength="8" maxlength="255" required>
+                <input type="text" name="cep" id="cep" placeholder="CEP" inputmode="numeric" pattern="[0-9]{5}-?[0-9]{3}" maxlength="9" autocomplete="postal-code" onblur="pesquisacep(this.value);" required>
+                <input type="text" name="rua" id="rua" placeholder="Rua" autocomplete="street-address" maxlength="160" required>
+                <input type="text" name="cidade" id="cidade" placeholder="Cidade" autocomplete="address-level2" maxlength="120" required>
+                <input type="text" name="uf" id="uf" placeholder="UF" autocomplete="address-level1" pattern="[A-Za-z]{2}" maxlength="2" required>
 
                 <button>Cadastrar</button>
             </form>
         </div>
         <div class="form-container sign-in">
-            <form action="logar.php" method="POST"> 
+            <form action="logar.php" method="POST">
+                <input type="hidden" name="csrf_token" value="<?= escape_html(csrf_token()) ?>">
                 <h1>Entrar</h1>
                 <div class="trilho" id="trilho">
                     <div class="indicador"></div>
@@ -110,9 +119,8 @@
                     <a href="#" class="icon"><i class="fa-brands fa-instagram"></i></a>
                 </div>
                 <span>ou use seu email e senha</span>
-                <input type="email" name="email" placeholder="Email">
-                <input type="password" name="password" placeholder="Senha">
-                <a href="#">Esqueci Minha Senha</a>
+                <input type="email" name="email" placeholder="Email" autocomplete="email" maxlength="254" required>
+                <input type="password" name="password" placeholder="Senha" autocomplete="current-password" maxlength="255" required>
                 <button>Entrar</button>
             </form>
         </div>

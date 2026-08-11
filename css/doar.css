@@ -635,3 +635,18 @@ body.light section {
       }
     }
 }
+.form-message {
+    margin: 0 0 18px;
+    padding: 12px 16px;
+    border-radius: 10px;
+    color: #ffffff;
+    font-size: 0.95rem;
+}
+
+.form-message--success {
+    background: #176b3a;
+}
+
+.form-message--error {
+    background: #9b1c1c;
+}

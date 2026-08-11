@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/verifica.php';
+$flash = flash_take();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
@@ -19,7 +23,7 @@
 
   <body>
     <header>
-      <a href="index.html" class="logo"> Adota Pet </a>
+      <a href="inicio.php" class="logo"> Adota Pet </a>
 
       <nav>
         <a href="inicio.php"> Home </a>
@@ -28,6 +32,7 @@
         <a href="adote2.html"> Quero Adotar </a>
         <a href="doar.php" class="active"> Quero Doar </a>
         <a href="denuncia.php"> Denuncia </a>
+        <a href="logout.php"> Sair </a>
       </nav>
       <div class="trilho" id="trilho">
         <div class="indicador"></div>
@@ -67,11 +72,13 @@
 
       <form action="cadastro_doar.php" method="POST">
         <input type="hidden" name="hidden" value="1">
+        <input type="hidden" name="csrf_token" value="<?= escape_html(csrf_token()) ?>">
+        <?= render_flash_message($flash) ?>
         <div id="input_container">
           <div class="input-box">
             <label for="nome_pet" class="form-label">Nome do pet</label>
           <div class="input-field">
-            <input type="text" name="nome_pet" id="nome_pet" class="form-control" placeholder="Kiara">
+            <input type="text" name="nome_pet" id="nome_pet" class="form-control" placeholder="Kiara" maxlength="120" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -79,7 +86,7 @@
           <div class="input-box">
             <label for="idade_pet" class="form-label">Idade do pet</label>
           <div class="input-field">
-            <input type="text" name="idade_pet" id="idade_pet" class="form-control" placeholder="3 anos">
+            <input type="text" name="idade_pet" id="idade_pet" class="form-control" placeholder="3 anos" maxlength="40" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -87,7 +94,7 @@
           <div class="input-box">
             <label for="nome" class="form-label">Nome para contato</label>
           <div class="input-field">
-            <input type="text" name="nome" id="nome" class="form-control" placeholder="João">
+            <input type="text" name="nome" id="nome" class="form-control" placeholder="João" autocomplete="name" maxlength="120" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -95,7 +102,7 @@
           <div class="input-box">
             <label for="tel" class="form-label">Telefone para contato</label>
           <div class="input-field">
-            <input type="tel" name="telefone" id="telefone" class="form-control" placeholder="(00) 00000-0000">
+            <input type="tel" name="telefone" id="telefone" class="form-control" placeholder="(00) 00000-0000" autocomplete="tel" maxlength="25" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -103,7 +110,7 @@
           <div class="input-box">
             <label for="email" class="form-label">Email para contato</label>
           <div class="input-field">
-            <input type="text" name="email" id="email" class="form-control" placeholder="exemplo@gmail.com">
+            <input type="email" name="email" id="email" class="form-control" placeholder="exemplo@gmail.com" autocomplete="email" maxlength="254" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -111,7 +118,7 @@
           <div class="input-box">
             <label for="cep" class="form-label">CEP</label>
           <div class="input-field">
-            <input type="text" name="cep" id="cep" class="form-control" placeholder="00000-000">
+            <input type="text" name="cep" id="cep" class="form-control" placeholder="00000-000" inputmode="numeric" pattern="[0-9]{5}-?[0-9]{3}" maxlength="9" autocomplete="postal-code" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -119,7 +126,7 @@
           <div class="input-box">
             <label for="cidade" class="form-label">Cidade</label>
           <div class="input-field">
-            <input type="text" name="cidade" id="cidade" class="form-control" placeholder="São Paulo">
+            <input type="text" name="cidade" id="cidade" class="form-control" placeholder="São Paulo" autocomplete="address-level2" maxlength="120" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -127,7 +134,7 @@
           <div class="input-box">
             <label for="uf" class="form-label">UF</label>
           <div class="input-field">
-            <input type="text" name="uf" id="uf" class="form-control" placeholder="SP">
+            <input type="text" name="uf" id="uf" class="form-control" placeholder="SP" autocomplete="address-level1" pattern="[A-Za-z]{2}" maxlength="2" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -135,7 +142,7 @@
           <div class="input-box">
             <label for="sobre" class="form-label">Sobre o pet</label>
           <div class="input-field">
-            <textarea name="sobre" id="sobre" class="form-control" placeholder="Descrição do pet"></textarea>
+            <textarea name="sobre" id="sobre" class="form-control" placeholder="Descrição do pet" minlength="10" maxlength="2000" required></textarea>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
