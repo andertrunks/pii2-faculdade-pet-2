@@ -5,6 +5,7 @@ services:
       - "8080:8080"
     environment:
       PORT: 8080
+      RUN_MIGRATIONS: 1
       DB_DRIVER: mysql
       DB_HOST: database
       DB_PORT: 3306

@@ -4,6 +4,8 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends libpq-dev \
     && docker-php-ext-install pdo_mysql pdo_pgsql \
     && a2enmod headers \
+    && printf '%s\n' 'ServerName localhost' > /etc/apache2/conf-available/servername.conf \
+    && a2enconf servername \
     && rm -rf /var/lib/apt/lists/*
 
 ENV PORT=8080 \
@@ -13,6 +15,7 @@ ENV PORT=8080 \
 
 COPY docker/000-default.conf /etc/apache2/sites-available/000-default.conf
 COPY docker/apache-entrypoint.sh /usr/local/bin/adota-pet-entrypoint
+COPY docker/php-production.ini /usr/local/etc/php/conf.d/zz-adota-pet-production.ini
 
 COPY index.php health.php /var/www/html/
 COPY components /var/www/html/components
@@ -26,6 +29,9 @@ RUN chmod +x /usr/local/bin/adota-pet-entrypoint \
     && chown -R www-data:www-data /var/www/html
 
 EXPOSE 8080
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+    CMD php -r '$port = getenv("PORT") ?: "8080"; $body = @file_get_contents("http://127.0.0.1:" . $port . "/health.php"); exit($body !== false && str_contains($body, "\"status\":\"ok\"") ? 0 : 1);'
 
 ENTRYPOINT ["adota-pet-entrypoint"]
 CMD ["apache2-foreground"]

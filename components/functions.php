@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 function is_https_request(): bool
 {
+    $forwardedProto = strtolower(trim(explode(',', (string) ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? ''))[0]));
+
     return (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off')
-        || ($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https';
+        || $forwardedProto === 'https';
 }
 
 function start_secure_session(): void
