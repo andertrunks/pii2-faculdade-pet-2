@@ -5,11 +5,11 @@ O Adota Pet é uma plataforma acadêmica de adoção responsável e proteção a
 ## Produção
 
 - Aplicação: a URL pública será registrada aqui ao concluir o primeiro deploy.
-- Hospedagem: Koyeb, instância web Free com deploy automático da branch `main`.
+- Hospedagem: Render, web service Free com deploy automático da branch `main`.
 - Banco: Neon PostgreSQL, plano Free.
 - Custo da infraestrutura configurada: R$ 0.
 
-A instância gratuita pode entrar em suspensão quando fica sem tráfego. A primeira requisição após esse período pode levar alguns segundos.
+A instância gratuita pode entrar em suspensão após 15 minutos sem tráfego. A primeira requisição após esse período pode levar cerca de um minuto.
 
 ## Tecnologias e arquitetura
 
@@ -18,12 +18,12 @@ A instância gratuita pode entrar em suspensão quando fica sem tráfego. A prim
 - HTML5, CSS3 e JavaScript sem framework;
 - Docker para build e execução reproduzíveis;
 - Neon PostgreSQL com TLS obrigatório;
-- Koyeb para build do `Dockerfile`, health check e entrega HTTPS.
+- Render para build do `Dockerfile`, health check e entrega HTTPS.
 
 Fluxo em produção:
 
 ```text
-Navegador --HTTPS--> Koyeb/Apache/PHP --TLS--> Neon PostgreSQL
+Navegador --HTTPS--> Render/Apache/PHP --TLS--> Neon PostgreSQL
                          |
                          +--> migração idempotente na inicialização
 ```
@@ -89,17 +89,17 @@ O entrypoint aguarda o banco ficar disponível antes de iniciar o Apache. Para e
 php scripts/migrate.php
 ```
 
-## Deploy gratuito no Koyeb
+## Deploy gratuito no Render
 
-1. Conecte o repositório GitHub `andertrunks/pii2-faculdade-pet-2`.
-2. Selecione a branch `main` e o builder `Dockerfile`.
-3. Escolha exclusivamente a instância `Free` em Frankfurt ou Washington, D.C.
-4. Exponha a porta HTTP `8080` na rota `/`.
-5. Configure o health check HTTP `GET /health.php` na porta `8080`.
-6. Cadastre `DATABASE_URL` como secret e `RUN_MIGRATIONS=1` como variável comum.
-7. Mantenha o autodeploy da branch `main` ativado.
+O `render.yaml` versionado define somente um web service Free, sem banco temporário do Render. O PostgreSQL persistente permanece no Neon.
 
-Não selecione instâncias `nano`, `eco-*`, Standard, Pro ou trials. Elas não fazem parte desta configuração de custo zero.
+1. Crie um Blueprint a partir do repositório `andertrunks/pii2-faculdade-pet-2`.
+2. Confirme a branch `main` e o runtime Docker.
+3. Informe `DATABASE_URL` no campo secreto solicitado pelo Blueprint.
+4. Confirme que o plano exibido é `Free`, a região é `Virginia` e não há banco Render.
+5. Aplique o Blueprint. O health check será `GET /health.php` e o autodeploy ocorrerá a cada commit na `main`.
+
+Não selecione `Starter`, `Standard`, `Pro`, workspace pago ou trial. A configuração aprovada usa apenas o web service Free.
 
 ## Verificações
 
@@ -143,6 +143,7 @@ scripts/          migrações e utilitários
 tests/            smoke tests sem dependências externas
 Dockerfile        imagem PHP 8.3 + Apache
 docker-compose.yml ambiente local com MySQL
+render.yaml       web service Free e secret não sincronizado
 ```
 
 ## Contexto acadêmico

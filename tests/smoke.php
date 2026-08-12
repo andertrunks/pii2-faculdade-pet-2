@@ -107,7 +107,11 @@ check(is_file($projectRoot . '/docker/php-production.ini'), 'Configuração PHP 
 
 $dockerfile = file_get_contents($projectRoot . '/Dockerfile');
 check(str_contains((string) $dockerfile, 'HEALTHCHECK'), 'HEALTHCHECK do contêiner ausente.');
-check(!is_file($projectRoot . '/render.yaml'), 'Configuração obsoleta do Render ainda está presente.');
+
+$renderBlueprint = file_get_contents($projectRoot . '/render.yaml');
+check(str_contains((string) $renderBlueprint, 'plan: free'), 'Blueprint não usa a instância gratuita.');
+check(str_contains((string) $renderBlueprint, 'sync: false'), 'DATABASE_URL não está declarada como secret.');
+check(!str_contains((string) $renderBlueprint, 'databases:'), 'Blueprint não deve criar banco temporário no Render.');
 
 if ($failures !== []) {
     fwrite(STDERR, "Falhas no smoke test:" . PHP_EOL);

@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: adota-pet
+    runtime: docker
+    repo: https://github.com/andertrunks/pii2-faculdade-pet-2
+    branch: main
+    plan: free
+    region: virginia
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /health.php
+    autoDeployTrigger: commit
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: RUN_MIGRATIONS
+        value: "1"
