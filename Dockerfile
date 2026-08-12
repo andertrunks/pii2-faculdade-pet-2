@@ -1,18 +1,31 @@
-# Imagem base PHP 8.3 já com Apache
 FROM php:8.3-apache
 
-# Instale pdo_mysql + habilite mod_rewrite (útil para futuras rotas "bonitas")
-RUN docker-php-ext-install pdo pdo_mysql \
-  && a2enmod rewrite
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends libpq-dev \
+    && docker-php-ext-install pdo_mysql pdo_pgsql \
+    && a2enmod headers \
+    && rm -rf /var/lib/apt/lists/*
 
-# Copie o projeto para a pasta pública do Apache
-# (colocamos tudo em /var/www/html/; se quiser pode mover só /components, /css etc.)
-COPY . /var/www/html/
+ENV PORT=8080 \
+    APP_ROOT=/var/www/html \
+    SCHEMA_DIR=/opt/adota-pet/database \
+    RUN_MIGRATIONS=1
 
-# Apache escuta na porta 80 por padrão – isso FUNCIONA no Render,
-# mas deixar explícito ajuda em testes locais
-ENV PORT=8080
-EXPOSE ${PORT}
+COPY docker/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY docker/apache-entrypoint.sh /usr/local/bin/adota-pet-entrypoint
 
-# Start do Apache
+COPY index.php health.php /var/www/html/
+COPY components /var/www/html/components
+COPY css /var/www/html/css
+COPY img /var/www/html/img
+COPY js /var/www/html/js
+COPY database /opt/adota-pet/database
+COPY scripts /opt/adota-pet/scripts
+
+RUN chmod +x /usr/local/bin/adota-pet-entrypoint \
+    && chown -R www-data:www-data /var/www/html
+
+EXPOSE 8080
+
+ENTRYPOINT ["adota-pet-entrypoint"]
 CMD ["apache2-foreground"]

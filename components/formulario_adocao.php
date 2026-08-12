@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/verifica.php';
+$flash = flash_take();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
@@ -19,15 +23,16 @@
 
   <body>
     <header>
-      <a href="index.html" class="logo"> Adota Pet </a>
+      <a href="inicio.php" class="logo"> Adota Pet </a>
 
       <nav>
         <a href="inicio.php"> Home </a>
         <a href="institucional2.html"> Institucional </a>
         <a href="ong2.html"> ONG's </a>
-        <a href="adote2.html"> Quero Adotar </a>
-        <a href="doar.php" class="active"> Quero Doar </a>
+        <a href="adote2.html" class="active"> Quero Adotar </a>
+        <a href="doar.php"> Quero Doar </a>
         <a href="denuncia.php"> Denuncia </a>
+        <a href="logout.php"> Sair </a>
       </nav>
       <div class="trilho" id="trilho">
         <div class="indicador"></div>
@@ -68,11 +73,13 @@
 
       <form action="recebe_form.php" method="POST">
         <input type="hidden" name="hidden" value="1">
+        <input type="hidden" name="csrf_token" value="<?= escape_html(csrf_token()) ?>">
+        <?= render_flash_message($flash) ?>
         <div id="input_container">
           <div class="input-box">
             <label for="nome" class="form-label">Nome completo</label>
           <div class="input-field">
-            <input type="text" name="nome" id="nome" class="form-control" placeholder="">
+            <input type="text" name="nome" id="nome" class="form-control" autocomplete="name" maxlength="120" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -80,7 +87,7 @@
           <div class="input-box">
             <label for="tel" class="form-label">Telefone</label>
           <div class="input-field">
-            <input type="tel" name="telefone" id="telefone" class="form-control" placeholder="">
+            <input type="tel" name="telefone" id="telefone" class="form-control" autocomplete="tel" maxlength="25" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -88,7 +95,7 @@
           <div class="input-box">
             <label for="idade" class="form-label">Idade</label>
           <div class="input-field">
-            <input type="text" name="idade" id="idade" class="form-control" placeholder="">
+            <input type="number" name="idade" id="idade" class="form-control" min="18" max="120" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -96,7 +103,7 @@
           <div class="input-box">
             <label for="profissao" class="form-label">Profissão</label>
           <div class="input-field">
-            <input type="text" name="profissao" id="profissao" class="form-control" placeholder="">
+            <input type="text" name="profissao" id="profissao" class="form-control" maxlength="120" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -104,7 +111,7 @@
           <div class="input-box">
             <label for="residencia" class="form-label">Tipo de residência (casa/ap)</label>
           <div class="input-field">
-            <input type="text" name="residencia" id="residencia" class="form-control" placeholder="">
+            <input type="text" name="residencia" id="residencia" class="form-control" maxlength="120" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -112,7 +119,7 @@
           <div class="input-box">
             <label for="espaco" class="form-label">Há espaço externo seguro para o animal?</label>
           <div class="input-field">
-            <input type="text" name="espaco" id="espaco" class="form-control" placeholder="">
+            <input type="text" name="espaco" id="espaco" class="form-control" maxlength="500" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -120,7 +127,7 @@
           <div class="input-box">
             <label for="acordo" class="form-label">Todos os moradores estão de acordo com a adoção?</label>
           <div class="input-field">
-            <input type="text" name="acordo" id="acordo" class="form-control" placeholder="">
+            <input type="text" name="acordo" id="acordo" class="form-control" maxlength="500" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -128,7 +135,7 @@
           <div class="input-box">
             <label for="teve_animais" class="form-label">Já teve animais de estimação?</label>
           <div class="input-field">
-            <input type="text" name="animais" id="animais" class="form-control" placeholder="">
+            <input type="text" name="animais" id="animais" class="form-control" maxlength="500" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -136,7 +143,7 @@
         <div class="input-box">
             <label for="pq_animais" class="form-label">Por que não possui mais esses animais?</label>
           <div class="input-field">
-            <input type="text" name="pq_animais" id="pq_animais" class="form-control" placeholder="">
+            <input type="text" name="pq_animais" id="pq_animais" class="form-control" maxlength="1000" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -144,7 +151,7 @@
         <div class="input-box">
             <label for="tempo" class="form-label">Quanto tempo do seu dia poderá dedicar ao animal?</label>
           <div class="input-field">
-            <input type="text" name="tempo" id="tempo" class="form-control" placeholder="">
+            <input type="text" name="tempo" id="tempo" class="form-control" maxlength="500" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -152,7 +159,7 @@
         <div class="input-box">
             <label for="deseja_adotar" class="form-label">Por que deseja adotar um animal de estimação?</label>
           <div class="input-field">
-            <input type="text" name="deseja_adotar" id="deseja_adotar" class="form-control" placeholder="">
+            <input type="text" name="deseja_adotar" id="deseja_adotar" class="form-control" maxlength="1000" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -160,7 +167,7 @@
         <div class="input-box">
             <label for="ciente" class="form-label">Está ciente da importância da vacinação e vermifugação?</label>
           <div class="input-field">
-            <input type="text" name="ciente" id="ciente" class="form-control" placeholder="">
+            <input type="text" name="ciente" id="ciente" class="form-control" maxlength="500" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>

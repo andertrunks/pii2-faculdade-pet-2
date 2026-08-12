@@ -1,19 +1,17 @@
 <?php
-session_start();
 
-/*  ↓↓↓  pegue os dados do ambiente; se não existirem, use valores padrão só para testes locais */
-$user     = getenv('DB_USER')     ?: 'root';
-$pass     = getenv('DB_PASS')     ?: '';
-$database = getenv('DB_NAME')     ?: 'adota-pet';
-$localhost= getenv('DB_HOST')     ?: 'localhost';
+declare(strict_types=1);
 
-global $pdo;
+require_once __DIR__ . '/functions.php';
+require_once __DIR__ . '/database.php';
+
+start_secure_session();
+send_security_headers();
 
 try {
-    $pdo = new PDO("mysql:dbname={$database};host={$localhost}", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    error_log('Falha na conexão com o banco: ' . $e->getMessage());
+    $pdo = create_database_connection();
+} catch (Throwable $exception) {
+    error_log('Falha na conexão com o banco: ' . $exception->getMessage());
     http_response_code(500);
     exit('Não foi possível conectar ao banco de dados.');
 }

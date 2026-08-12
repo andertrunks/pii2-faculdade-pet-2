@@ -1,3 +1,7 @@
+<?php
+require_once __DIR__ . '/verifica.php';
+$flash = flash_take();
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
   <head>
@@ -19,7 +23,7 @@
 
   <body>
     <header>
-      <a href="index.html" class="logo"> Adota Pet </a>
+      <a href="inicio.php" class="logo"> Adota Pet </a>
 
       <nav>
         <a href="inicio.php"> Home </a>
@@ -28,6 +32,7 @@
         <a href="adote2.html"> Quero Adotar </a>
         <a href="doar.php"> Quero Doar </a>
         <a href="denuncia.php" class="active"> Denuncia </a>
+        <a href="logout.php"> Sair </a>
       </nav>
       <div class="trilho" id="trilho">
         <div class="indicador"></div>
@@ -67,11 +72,13 @@
 
       <form action="efetuar_denuncia.php" method="POST">
         <input type="hidden" name="hidden" value="1">
+        <input type="hidden" name="csrf_token" value="<?= escape_html(csrf_token()) ?>">
+        <?= render_flash_message($flash) ?>
         <div id="input_container">
           <div class="input-box">
             <label for="titulo" class="form-label">Titulo da denúncia</label>
           <div class="input-field">
-            <input type="text" name="titulo" id="titulo" class="form-control" placeholder="">
+            <input type="text" name="titulo" id="titulo" class="form-control" maxlength="160" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -79,7 +86,7 @@
           <div class="input-box">
             <label for="data_denuncia" class="form-label">Data da denúncia</label>
           <div class="input-field">
-            <input type="date" name="data_denuncia" id="data_denuncia" class="form-control" placeholder="">
+            <input type="date" name="data_denuncia" id="data_denuncia" class="form-control" required>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>
@@ -87,7 +94,7 @@
           <div class="input-box">
             <label for="descricao" class="form-label">Descrição da denúncia</label>
           <div class="input-field">
-            <textarea name="descricao" id="descricao" class="form-control" placeholder=""></textarea>
+            <textarea name="descricao" id="descricao" class="form-control" minlength="20" maxlength="4000" required></textarea>
             <i class="fa-solid fa-paw"></i>
           </div>
         </div>

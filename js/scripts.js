@@ -1,46 +1,76 @@
-let prevButton = document.getElementById('prev')
-let nextButton = document.getElementById('next')
-let container = document.querySelector('.container')
-let items = container.querySelectorAll('.list .item')
-let indicator = document.querySelector('.indicators')
-let dots = indicator.querySelectorAll('ul li')
-let list = container.querySelector('.list')
-let trilho = document.getElementById('trilho')
-let body = document.querySelector('body')
-let home= document.querySelector('.home')
+const prevButton = document.getElementById('prev');
+const nextButton = document.getElementById('next');
+const container = document.querySelector('.container');
+const items = container?.querySelectorAll('.list .item') ?? [];
+const indicator = document.querySelector('.indicators');
+const dots = indicator?.querySelectorAll('ul li') ?? [];
+const list = container?.querySelector('.list');
+const themeToggle = document.getElementById('trilho');
+const pageBody = document.body;
+const themedSections = document.querySelectorAll('.home');
 
-let active = 0
-let firstPosition = 0
-let lastPosition = items.length - 1
+let active = 0;
+const lastPosition = items.length - 1;
 
 function setSlider() {
- 
-  let itemOld = container.querySelector('.list .item.active')
-  itemOld.classList.remove('active')
+  if (!container || !indicator || items.length === 0 || dots.length === 0) {
+    return;
+  }
 
-  let dotsOld = indicator.querySelector('ul li.active')
-  dotsOld.classList.remove('active')
-  dots[active].classList.add('active')
+  container.querySelector('.list .item.active')?.classList.remove('active');
+  indicator.querySelector('ul li.active')?.classList.remove('active');
+  dots[active]?.classList.add('active');
 
-  indicator.querySelector('.number').innerHTML = '0' + (active + 1)
+  const number = indicator.querySelector('.number');
+  if (number) {
+    number.textContent = String(active + 1).padStart(2, '0');
+  }
 }
 
-nextButton.onclick = () => {
-  list.style.setProperty('--calculation', 1)
-  active = active + 1 > lastPosition ? 0 : active + 1
-  setSlider()
-  items[active].classList.add('active')
+if (nextButton && list && items.length > 0) {
+  nextButton.addEventListener('click', () => {
+    list.style.setProperty('--calculation', '1');
+    active = active + 1 > lastPosition ? 0 : active + 1;
+    setSlider();
+    items[active]?.classList.add('active');
+  });
 }
 
-prevButton.onclick = () => {
-  list.style.setProperty('--calculation', -1)
-  active = active - 1 < firstPosition ? lastPosition : active - 1
-  setSlider()
-  items[active].classList.add('active')
+if (prevButton && list && items.length > 0) {
+  prevButton.addEventListener('click', () => {
+    list.style.setProperty('--calculation', '-1');
+    active = active - 1 < 0 ? lastPosition : active - 1;
+    setSlider();
+    items[active]?.classList.add('active');
+  });
 }
 
-trilho.addEventListener('click', () => {
-  trilho.classList.toggle('light')
-  body.classList.toggle('light')
-  home.classList.toggle('light')
-})
+function applyTheme(isLight) {
+  themeToggle?.classList.toggle('light', isLight);
+  pageBody?.classList.toggle('light', isLight);
+  themedSections.forEach((section) => section.classList.toggle('light', isLight));
+}
+
+function getSavedTheme() {
+  try {
+    return window.localStorage?.getItem('adota-pet-theme') ?? null;
+  } catch {
+    return null;
+  }
+}
+
+function saveTheme(value) {
+  try {
+    window.localStorage?.setItem('adota-pet-theme', value);
+  } catch {
+    // O tema continua funcionando mesmo quando o navegador bloqueia o armazenamento.
+  }
+}
+
+applyTheme(getSavedTheme() === 'light');
+
+themeToggle?.addEventListener('click', () => {
+  const isLight = !pageBody.classList.contains('light');
+  applyTheme(isLight);
+  saveTheme(isLight ? 'light' : 'dark');
+});

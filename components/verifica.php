@@ -1,17 +1,15 @@
 <?php
 
-require "conexao.php";
+declare(strict_types=1);
 
-if(isset($_SESSION['id_cadastro']) && !empty($_SESSION['id_cadastro'])){
+require_once __DIR__ . '/conexao.php';
+require_once __DIR__ . '/Usuario.class.php';
 
-    require_once 'Usuario.class.php';
-    $u = new Usuario();
+$userId = require_authenticated_user('login.php');
+$usuario = new Usuario($pdo);
+$nomeUser = $usuario->findNameById($userId);
 
-    $listLogado = $u->logado($_SESSION['id_cadastro']);
-    $nomeUser = $listLogado['name'];
-
-}else{
-    header("Location: login.php");
+if ($nomeUser === null) {
+    logout_user();
+    redirect_with_flash('login.php', 'error', 'Sua conta não está mais disponível.');
 }
-
-?>
