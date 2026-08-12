@@ -97,7 +97,10 @@ O `render.yaml` versionado define somente um web service Free, sem banco tempor�
 2. Confirme a branch `main` e o runtime Docker.
 3. Informe `DATABASE_URL` no campo secreto solicitado pelo Blueprint.
 4. Confirme que o plano exibido é `Free`, a região é `Virginia` e não há banco Render.
-5. Aplique o Blueprint. O health check será `GET /health.php` e o autodeploy ocorrerá a cada commit na `main`.
+5. Aplique o Blueprint. O health check será `GET /health.php`.
+6. Cadastre o deploy hook do Render no GitHub Actions como o segredo `RENDER_DEPLOY_HOOK`.
+
+O workflow `.github/workflows/deploy-render.yml` executa os smoke tests e o lint PHP em cada push na `main`. Somente após os testes passarem ele aciona o deploy hook secreto do Render. Isso mantém o autodeploy mesmo quando o serviço foi criado a partir da URL pública do repositório, que não recebe webhooks do GitHub.
 
 Não selecione `Starter`, `Standard`, `Pro`, workspace pago ou trial. A configuração aprovada usa apenas o web service Free.
 
