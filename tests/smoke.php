@@ -77,6 +77,18 @@ foreach ($pageFiles as $pageFile) {
         continue;
     }
 
+    if (str_contains($content, '<head>')) {
+        check(
+            str_contains($content, '<meta name="viewport" content="width=device-width, initial-scale=1.0">'),
+            'Viewport responsivo ausente em ' . basename($pageFile) . '.'
+        );
+    }
+
+    check(
+        !preg_match('/AnaJuliaN|ana-júlia|archv\.naju/i', $content),
+        'Perfil social de terceiro encontrado em ' . basename($pageFile) . '.'
+    );
+
     preg_match_all($attributePattern, $content, $attributeMatches);
     preg_match_all($onclickPattern, $content, $onclickMatches);
     $references = array_merge($attributeMatches[1] ?? [], $onclickMatches[1] ?? []);
@@ -97,6 +109,30 @@ foreach ($pageFiles as $pageFile) {
             : dirname($pageFile) . '/' . $path;
 
         check(file_exists($target), basename($pageFile) . " aponta para arquivo inexistente: {$reference}");
+    }
+}
+
+$socialProfiles = [
+    'LinkedIn' => 'https://www.linkedin.com/in/andersonluiscosta/',
+    'GitHub' => 'https://github.com/andertrunks',
+    'Facebook' => 'https://www.facebook.com/andersonluis.costa',
+    'Instagram' => 'https://www.instagram.com/anderluiscosta/',
+    'X' => 'https://x.com/anderluiscosta',
+];
+
+foreach (['components/index.html', 'components/inicio.php'] as $relativePath) {
+    $content = (string) file_get_contents($projectRoot . '/' . $relativePath);
+    $previousPosition = -1;
+
+    foreach ($socialProfiles as $network => $url) {
+        $needle = '<a href="' . $url . '" target="_blank" rel="noopener noreferrer" aria-label="'
+            . $network . ' de Anderson Luis Costa">';
+        $position = strpos($content, $needle);
+        check($position !== false, "Link acessível do {$network} ausente em {$relativePath}.");
+        check($position !== false && $position > $previousPosition, "Ordem social incorreta em {$relativePath}.");
+        if ($position !== false) {
+            $previousPosition = $position;
+        }
     }
 }
 
