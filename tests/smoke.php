@@ -143,6 +143,13 @@ check(is_file($projectRoot . '/docker/php-production.ini'), 'Configuração PHP 
 
 $dockerfile = file_get_contents($projectRoot . '/Dockerfile');
 check(str_contains((string) $dockerfile, 'HEALTHCHECK'), 'HEALTHCHECK do contêiner ausente.');
+check(str_contains((string) $dockerfile, 'ServerName localhost'), 'ServerName global do Apache ausente.');
+
+$indexCss = file_get_contents($projectRoot . '/css/index.css');
+check(substr_count((string) $indexCss, 'overflow-x: hidden') >= 2, 'Proteção contra overflow horizontal ausente.');
+
+$readme = file_get_contents($projectRoot . '/README.md');
+check(str_contains((string) $readme, 'https://adota-pet-jdzq.onrender.com'), 'URL pública ausente do README.');
 
 $renderBlueprint = file_get_contents($projectRoot . '/render.yaml');
 check(str_contains((string) $renderBlueprint, 'plan: free'), 'Blueprint não usa a instância gratuita.');

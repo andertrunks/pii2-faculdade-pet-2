@@ -4,7 +4,7 @@ O Adota Pet é uma plataforma acadêmica de adoção responsável e proteção a
 
 ## Produção
 
-- Aplicação: a URL pública será registrada aqui ao concluir o primeiro deploy.
+- Aplicação: [https://adota-pet-jdzq.onrender.com](https://adota-pet-jdzq.onrender.com).
 - Hospedagem: Render, web service Free com deploy automático da branch `main`.
 - Banco: Neon PostgreSQL, plano Free.
 - Custo da infraestrutura configurada: R$ 0.
