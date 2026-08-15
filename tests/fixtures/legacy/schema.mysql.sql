@@ -1,0 +1,56 @@
+CREATE TABLE IF NOT EXISTS cadastro (
+    id_cadastro BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    name VARCHAR(120) NOT NULL,
+    email VARCHAR(254) NOT NULL,
+    password VARCHAR(255) NOT NULL,
+    cep VARCHAR(8) NOT NULL,
+    rua VARCHAR(160) NOT NULL,
+    cidade VARCHAR(120) NOT NULL,
+    uf CHAR(2) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_cadastro),
+    UNIQUE KEY cadastro_email_unique (email)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS doar (
+    id_doacao BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    nome_pet VARCHAR(120) NOT NULL,
+    idade_pet VARCHAR(40) NOT NULL,
+    nome VARCHAR(120) NOT NULL,
+    telefone VARCHAR(15) NOT NULL,
+    email VARCHAR(254) NOT NULL,
+    cep VARCHAR(8) NOT NULL,
+    cidade VARCHAR(120) NOT NULL,
+    uf CHAR(2) NOT NULL,
+    sobre TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_doacao)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS denuncia (
+    id_denuncia BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    titulo VARCHAR(160) NOT NULL,
+    data_denuncia DATE NOT NULL,
+    descricao TEXT NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_denuncia)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE IF NOT EXISTS adocao (
+    id_adocao BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(120) NOT NULL,
+    telefone VARCHAR(15) NOT NULL,
+    idade SMALLINT UNSIGNED NOT NULL,
+    profissao VARCHAR(120) NOT NULL,
+    residencia VARCHAR(120) NOT NULL,
+    espaco VARCHAR(500) NOT NULL,
+    acordo VARCHAR(500) NOT NULL,
+    animais VARCHAR(500) NOT NULL,
+    pq_animais TEXT NOT NULL,
+    tempo VARCHAR(500) NOT NULL,
+    deseja_adotar TEXT NOT NULL,
+    ciente VARCHAR(500) NOT NULL,
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (id_adocao)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
