@@ -157,6 +157,16 @@ check(is_file($projectRoot . '/database/migrations/20260815_01_animais_relaciona
 check(is_file($projectRoot . '/docker-compose.yml'), 'Docker Compose ausente.');
 check(is_file($projectRoot . '/docker/php-production.ini'), 'Configuração PHP de produção ausente.');
 
+$migrationRunner = (string) file_get_contents($projectRoot . '/scripts/migrate.php');
+check(
+    str_contains($migrationRunner, 'execute_schema_statements($pdo, $driver, $sql, $schemaPath)'),
+    'O esquema ainda nao e aplicado de forma isolada e compativel com bancos legados.'
+);
+check(
+    str_contains($migrationRunner, 'database_table_exists($pdo, $driver, $matches[1])'),
+    'As tabelas legadas existentes nao sao preservadas pelo inicializador.'
+);
+
 $dockerfile = file_get_contents($projectRoot . '/Dockerfile');
 check(str_contains((string) $dockerfile, 'HEALTHCHECK'), 'HEALTHCHECK do contêiner ausente.');
 check(str_contains((string) $dockerfile, 'ServerName localhost'), 'ServerName global do Apache ausente.');
