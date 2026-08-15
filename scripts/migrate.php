@@ -135,21 +135,19 @@ try {
             throw new RuntimeException('Migração inválida: ' . $version);
         }
 
-        if ($driver === 'pgsql') {
-            $pdo->beginTransaction();
-        }
         try {
+            // As operações são idempotentes e precisam ser confirmadas uma a
+            // uma. Isso permite retomar uma migração interrompida e evita que
+            // conexões PostgreSQL em pool permaneçam em estado abortado.
             $migration($pdo, $driver);
             $record = $pdo->prepare('INSERT INTO schema_migrations (version) VALUES (:version)');
             $record->execute(['version' => $version]);
-            if ($pdo->inTransaction()) {
-                $pdo->commit();
-            }
         } catch (Throwable $exception) {
-            if ($pdo->inTransaction()) {
-                $pdo->rollBack();
-            }
-            throw $exception;
+            throw new RuntimeException(
+                'Migração ' . $version . ' interrompida: ' . $exception->getMessage(),
+                0,
+                $exception
+            );
         }
     }
 

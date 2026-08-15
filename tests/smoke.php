@@ -166,6 +166,10 @@ check(
     str_contains($migrationRunner, 'database_table_exists($pdo, $driver, $matches[1])'),
     'As tabelas legadas existentes nao sao preservadas pelo inicializador.'
 );
+check(
+    !str_contains($migrationRunner, '$pdo->beginTransaction()'),
+    'A migracao incremental nao deve manter toda a conexao PostgreSQL em uma unica transacao.'
+);
 
 $dockerfile = file_get_contents($projectRoot . '/Dockerfile');
 check(str_contains((string) $dockerfile, 'HEALTHCHECK'), 'HEALTHCHECK do contêiner ausente.');
