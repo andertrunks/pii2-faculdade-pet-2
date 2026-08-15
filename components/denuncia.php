@@ -30,14 +30,12 @@ $flash = flash_take();
         <a href="inicio.php"> Home </a>
         <a href="institucional2.html"> Institucional </a>
         <a href="ong2.html"> ONG's </a>
-        <a href="adote2.html"> Quero Adotar </a>
+        <a href="adote.php"> Quero Adotar </a>
         <a href="doar.php"> Quero Doar </a>
         <a href="denuncia.php" class="active"> Denuncia </a>
         <a href="logout.php"> Sair </a>
       </nav>
-      <div class="trilho" id="trilho">
-        <div class="indicador"></div>
-    </div>
+      <button type="button" class="trilho" id="trilho" aria-label="Alternar tema claro e escuro" aria-pressed="false"><span class="indicador" aria-hidden="true"></span></button>
     </header>
 
     <section class="container">
@@ -121,7 +119,7 @@ $flash = flash_take();
           <img class="logo" src="../img/logo.webp" width="90" alt="">
           <h4>Contato</h4>
           <p><strong>Endereço:</strong> Rincão, SP</p>
-          <p><strong>Telefone:</strong>+55169999-9999 | +55169999-9999</p>
+          <p><strong>Atendimento:</strong> <a href="informacoes.html#contato">fale com a equipe</a></p>
           <div class="follow">
               <h4>Nos siga</h4>
               <div class="icon">
@@ -136,21 +134,21 @@ $flash = flash_take();
 
       <div class="col">
           <h4>Sobre</h4>
-          <a href="#">Sobre Nós</a>
-          <a href="#">Perguntas Frequentes</a>
-          <a href="#">Política de Privacidade</a>
-          <a href="#">Termos & Condições</a>
-          <a href="#">Entre em contato</a>
+          <a href="institucional.html">Sobre o projeto</a>
+          <a href="informacoes.html#faq">Perguntas frequentes</a>
+          <a href="informacoes.html#privacidade">Política de privacidade</a>
+          <a href="informacoes.html#termos">Termos de uso</a>
+          <a href="informacoes.html#contato">Entre em contato</a>
       </div>
 
       <div class="col">
           <h4>Colabore</h4>
-          <a href="#">Doe qualquer valor</a>
-          <a href="#">Seja uma Empresa Parceira</a>
+          <a href="login.php">Cadastre-se para colaborar</a>
+          <a href="informacoes.html#parcerias">Seja uma organização parceira</a>
       </div>
 
       <div class="copyright">
-          <p>&copy 2024, Todos os direitos reservados - Naju</p>
+          <p>&copy; 2026 Adota Pet. Projeto acadêmico.</p>
       </div>
     </footer>
 

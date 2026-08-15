@@ -1,24 +1,31 @@
 name: Testar e publicar no Render
 
 on:
+  pull_request:
   push:
     branches:
       - main
   workflow_dispatch:
 
 concurrency:
-  group: deploy-render-production
+  group: adota-pet-${{ github.ref }}
   cancel-in-progress: true
 
 permissions:
   contents: read
 
 jobs:
-  test-and-deploy:
+  quality:
+    name: Qualidade estática
     runs-on: ubuntu-latest
     steps:
       - name: Baixar código
         uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
 
       - name: Executar smoke tests
         run: php tests/smoke.php
@@ -26,6 +33,111 @@ jobs:
       - name: Validar sintaxe PHP
         run: find . -type f -name '*.php' -print0 | xargs -0 -n1 php -l
 
+      - name: Validar JavaScript
+        run: find js -type f -name '*.js' -print0 | xargs -0 -n1 node --check
+
+  integration-mysql:
+    name: Integração MySQL
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.4
+        env:
+          MYSQL_DATABASE: adota_pet
+          MYSQL_USER: adota_pet
+          MYSQL_PASSWORD: adota_pet_test
+          MYSQL_ROOT_PASSWORD: root_test
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping -h 127.0.0.1 -uadota_pet -padota_pet_test"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+    env:
+      DB_DRIVER: mysql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_NAME: adota_pet
+      DB_USER: adota_pet
+      DB_PASS: adota_pet_test
+      BASE_URL: http://127.0.0.1:8080
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_mysql
+
+      - name: Migrar duas vezes para validar idempotência
+        run: php scripts/migrate.php && php scripts/migrate.php
+
+      - name: Executar fluxos HTTP e persistência
+        run: |
+          php -S 127.0.0.1:8080 > /tmp/adota-pet-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..20}; do curl --fail --silent http://127.0.0.1:8080/health.php && break; sleep 1; done
+          php tests/e2e.php || { cat /tmp/adota-pet-server.log; exit 1; }
+
+  integration-postgres:
+    name: Integração PostgreSQL
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: adota_pet
+          POSTGRES_USER: adota_pet
+          POSTGRES_PASSWORD: adota_pet_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U adota_pet -d adota_pet"
+          --health-interval=5s
+          --health-timeout=5s
+          --health-retries=20
+    env:
+      DB_DRIVER: pgsql
+      DB_HOST: 127.0.0.1
+      DB_PORT: 5432
+      DB_NAME: adota_pet
+      DB_USER: adota_pet
+      DB_PASS: adota_pet_test
+      BASE_URL: http://127.0.0.1:8080
+    steps:
+      - name: Baixar código
+        uses: actions/checkout@v4
+
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          extensions: pdo_pgsql
+
+      - name: Migrar duas vezes para validar idempotência
+        run: php scripts/migrate.php && php scripts/migrate.php
+
+      - name: Executar fluxos HTTP e persistência
+        run: |
+          php -S 127.0.0.1:8080 > /tmp/adota-pet-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..20}; do curl --fail --silent http://127.0.0.1:8080/health.php && break; sleep 1; done
+          php tests/e2e.php || { cat /tmp/adota-pet-server.log; exit 1; }
+
+  deploy:
+    name: Publicar no Render
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs:
+      - quality
+      - integration-mysql
+      - integration-postgres
+    runs-on: ubuntu-latest
+    steps:
       - name: Acionar deploy no Render
         env:
           RENDER_DEPLOY_HOOK: ${{ secrets.RENDER_DEPLOY_HOOK }}

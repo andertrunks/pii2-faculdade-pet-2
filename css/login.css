@@ -294,3 +294,92 @@ body.light{
 .form-message--error {
     background: #9b1c1c;
 }
+
+.back-link {
+    position: fixed;
+    top: 18px;
+    left: 18px;
+    z-index: 1100;
+    display: inline-flex;
+    gap: 8px;
+    align-items: center;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.82);
+    font-weight: 600;
+}
+
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.field-status {
+    min-height: 18px;
+    margin: 0 !important;
+    color: #5a3520;
+    font-size: 0.74rem !important;
+    text-align: left;
+}
+
+.container .trilho {
+    border: 1px solid #707770;
+    padding: 0;
+}
+
+:focus-visible {
+    outline: 3px solid #005fcc !important;
+    outline-offset: 3px;
+}
+
+@media (max-width: 780px) {
+    body {
+        height: auto;
+        min-height: 100vh;
+        padding: 72px 12px 24px;
+    }
+
+    .container,
+    .container.active {
+        display: flex;
+        width: min(100%, 540px);
+        min-height: 0;
+        overflow: hidden;
+        flex-direction: column;
+    }
+
+    .form-container,
+    .container.active .form-container,
+    .container.active .sign-in,
+    .container.active .sign-up {
+        position: static;
+        width: 100%;
+        height: auto;
+        opacity: 1;
+        transform: none;
+        animation: none;
+    }
+
+    .sign-in {
+        order: 1;
+    }
+
+    .sign-up {
+        order: 2;
+        border-top: 1px solid #ddd;
+    }
+
+    .container form {
+        padding: 30px 24px;
+    }
+
+    .toggle-container {
+        display: none;
+    }
+}

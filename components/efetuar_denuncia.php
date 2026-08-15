@@ -13,13 +13,14 @@ try {
     $descricao = post_string('descricao', 4000, 20);
 
     $statement = $pdo->prepare(
-        'INSERT INTO denuncia (titulo, data_denuncia, descricao)
-         VALUES (:titulo, :data_denuncia, :descricao)'
+        'INSERT INTO denuncia (titulo, data_denuncia, descricao, user_id)
+         VALUES (:titulo, :data_denuncia, :descricao, :user_id)'
     );
     $statement->execute([
         'titulo' => $titulo,
         'data_denuncia' => $dataDenuncia,
         'descricao' => $descricao,
+        'user_id' => $userId,
     ]);
 
     header('Location: certo2.html', true, 303);

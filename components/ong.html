@@ -1,215 +1,42 @@
 <!DOCTYPE html>
-<html lang="pt-br">
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=League+Gothic&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-    <link
-        href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="../css/ong.css">
-    <title> Adota Pet </title>
-  </head>
-
-  <body>
-    <header>
-        <a href="index.html" class="logo"> Adota Pet </a>
-
-    <nav>
-        <a href="index.html"> Home </a>
-        <a href="institucional.html"> Institucional </a>
-        <a href="ong.html" class="active"> ONG's </a>
-        <a href="adote.html"> Quero Adotar </a>
-        <a href="login.php"> Login </a>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Referências de organizações brasileiras de proteção animal para você conhecer.">
+  <link rel="stylesheet" href="../css/adote.css">
+  <title>Organizações de proteção animal | Adota Pet</title>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+  <header class="app-header">
+    <a href="index.html" class="logo">Adota Pet</a>
+    <nav aria-label="Navegação principal">
+      <a href="index.html">Home</a>
+      <a href="institucional.html">Institucional</a>
+      <a href="ong.html" class="active" aria-current="page">ONGs</a>
+      <a href="adote.php">Quero Adotar</a>
+      <a href="login.php">Entrar</a>
     </nav>
-    <div class="trilho" id="trilho">
-        <div class="indicador"></div>
-    </div>
-    </header>
-
-    <section class="container">
-      <div class="list">
-
-          <div class="item active">
-              <div class="animal-img">
-                  <img src="../img/animal3.webp" alt="">
-              </div>
-              <div class="content">
-                  <p class="animal-information">
-                    Apoie as ONGs e faça a diferença na vida de milhares de animais
-                  </p>
-                  <h2>
-                    ONGs de proteção animal
-                  </h2>
-                  <p class="description">
-                    Descubra o trabalho incrível das ONGs que dedicam suas vidas a
-                    resgatar, cuidar e encontrar lares para animais abandonados e 
-                    maltratados.
-                  </p>
-              </div>
-          </div>
-      </div>
+    <button type="button" class="trilho" id="trilho" aria-label="Alternar tema claro e escuro" aria-pressed="false"><span class="indicador" aria-hidden="true"></span></button>
+  </header>
+  <main id="conteudo">
+    <section class="catalog-hero section-p1">
+      <div><p class="eyebrow">Proteção animal</p><h1>Conheça organizações que atuam pela causa</h1><p>Use os atalhos para localizar os canais oficiais e confirme diretamente horários, regiões atendidas e processos de adoção.</p></div>
     </section>
-
-    <section id="prodetails" class="section2">
-      <div class="single-pro-image">
-          <img src="../img/ong/suipa.webp" width="50%" id="MainImg" alt="">
-      </div>
-      <div class="single-pro-details">
-              <h4>Suipa</h4>
-              <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget tortor purus. In ut mi rutrum, ullamcorper ex et, dictum quam. 
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. In blandit hendrerit lorem, eu 
-                  condimentum tellus egestas feugiat. Etiam lacinia quam nec mollis viverra. Cras ultricies eros turpis, sed efficitur tortor hendrerit nec. 
-                  Etiam nec nibh diam. Praesent vehicula purus ipsum, pharetra condimentum ipsum pretium et. Praesent in fermentum nisi. Nullam tristique massa metus, ut sagittis ante sodales et.
-              </span>
-      </div>
+    <section class="ong-grid section-p1" aria-label="Organizações para conhecer">
+      <article class="ong-card"><img src="../img/ong/suipa.webp" alt="Identidade visual da SUIPA" loading="lazy"><h2>SUIPA</h2><p>Referência de proteção animal. Consulte os canais oficiais para conhecer as formas atuais de adoção e apoio.</p><a href="https://www.google.com/maps/search/?api=1&query=SUIPA" target="_blank" rel="noopener noreferrer">Localizar e conferir canais</a></article>
+      <article class="ong-card"><img src="../img/ong/ampara.webp" alt="Identidade visual da AMPARA Animal" loading="lazy"><h2>AMPARA Animal</h2><p>Organização voltada à proteção e ao bem-estar animal. Confirme ações e campanhas diretamente em seus canais.</p><a href="https://www.google.com/maps/search/?api=1&query=AMPARA+Animal" target="_blank" rel="noopener noreferrer">Localizar e conferir canais</a></article>
+      <article class="ong-card"><img src="../img/ong/caosemdono.webp" alt="Identidade visual da Cão Sem Dono" loading="lazy"><h2>Cão Sem Dono</h2><p>Atua com cães em situação de vulnerabilidade. Consulte os critérios vigentes para adoção e colaboração.</p><a href="https://www.google.com/maps/search/?api=1&query=Cao+Sem+Dono" target="_blank" rel="noopener noreferrer">Localizar e conferir canais</a></article>
+      <article class="ong-card"><img src="../img/ong/viralata.webp" alt="Identidade visual da Vira Lata é Dez" loading="lazy"><h2>Vira Lata é Dez</h2><p>Promove proteção e adoção responsável. Verifique pelos canais oficiais como conhecer os animais atendidos.</p><a href="https://www.google.com/maps/search/?api=1&query=Vira+Lata+e+Dez" target="_blank" rel="noopener noreferrer">Localizar e conferir canais</a></article>
+      <article class="ong-card"><img src="../img/ong/inst_caramelo.webp" alt="Identidade visual do Instituto Caramelo" loading="lazy"><h2>Instituto Caramelo</h2><p>Trabalha em defesa dos animais e em ações de adoção. Confira informações atualizadas diretamente com a instituição.</p><a href="https://www.google.com/maps/search/?api=1&query=Instituto+Caramelo" target="_blank" rel="noopener noreferrer">Localizar e conferir canais</a></article>
+      <article class="ong-card"><img src="../img/ong/focinhos.webp" alt="Identidade visual da Focinhos de Luz" loading="lazy"><h2>Focinhos de Luz</h2><p>Iniciativa de proteção animal com atuação comunitária. Consulte seus canais para formas seguras de participar.</p><a href="https://www.google.com/maps/search/?api=1&query=Focinhos+de+Luz" target="_blank" rel="noopener noreferrer">Localizar e conferir canais</a></article>
+      <article class="ong-card"><img src="../img/ong/amg_sfrancisco.webp" alt="Identidade visual da Amigos de São Francisco" loading="lazy"><h2>Amigos de São Francisco</h2><p>Organização dedicada ao cuidado animal. Confirme a disponibilidade de adoções e voluntariado em seus canais.</p><a href="https://www.google.com/maps/search/?api=1&query=Amigos+de+Sao+Francisco+animais" target="_blank" rel="noopener noreferrer">Localizar e conferir canais</a></article>
+      <article class="ong-card"><img src="../img/ong/gatopoles.webp" alt="Identidade visual da Gatópoles" loading="lazy"><h2>Gatópoles</h2><p>Iniciativa voltada à proteção e adoção de gatos. Consulte orientações atualizadas antes de iniciar o contato.</p><a href="https://www.google.com/maps/search/?api=1&query=Gatopoles" target="_blank" rel="noopener noreferrer">Localizar e conferir canais</a></article>
     </section>
-
-    <section id="prodetails" class="section2">
-        <div class="single-pro-image">
-            <img src="../img/ong/ampara.webp" width="50%" id="MainImg" alt="">
-        </div>
-        <div class="single-pro-details">
-                <h4>Ampara Animal</h4>
-                <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget tortor purus. In ut mi rutrum, ullamcorper ex et, dictum quam. 
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In blandit hendrerit lorem, eu 
-                    condimentum tellus egestas feugiat. Etiam lacinia quam nec mollis viverra. Cras ultricies eros turpis, sed efficitur tortor hendrerit nec. 
-                    Etiam nec nibh diam. Praesent vehicula purus ipsum, pharetra condimentum ipsum pretium et. Praesent in fermentum nisi. Nullam tristique massa metus, ut sagittis ante sodales et.
-                </span>
-        </div>
-    </section>
-
-    <section id="prodetails" class="section2">
-        <div class="single-pro-image">
-            <img src="../img/ong/caosemdono.webp" width="50%" id="MainImg" alt="">
-        </div>
-        <div class="single-pro-details">
-                <h4>Cão sem dono</h4>
-                <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget tortor purus. In ut mi rutrum, ullamcorper ex et, dictum quam. 
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In blandit hendrerit lorem, eu 
-                    condimentum tellus egestas feugiat. Etiam lacinia quam nec mollis viverra. Cras ultricies eros turpis, sed efficitur tortor hendrerit nec. 
-                    Etiam nec nibh diam. Praesent vehicula purus ipsum, pharetra condimentum ipsum pretium et. Praesent in fermentum nisi. Nullam tristique massa metus, ut sagittis ante sodales et.
-                </span>
-        </div>
-    </section>
-
-    <section id="prodetails" class="section2">
-        <div class="single-pro-image">
-            <img src="../img/ong/viralata.webp" width="50%" id="MainImg" alt="">
-        </div>
-        <div class="single-pro-details">
-                <h4>Vira Lata é Dez</h4>
-                <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget tortor purus. In ut mi rutrum, ullamcorper ex et, dictum quam. 
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In blandit hendrerit lorem, eu 
-                    condimentum tellus egestas feugiat. Etiam lacinia quam nec mollis viverra. Cras ultricies eros turpis, sed efficitur tortor hendrerit nec. 
-                    Etiam nec nibh diam. Praesent vehicula purus ipsum, pharetra condimentum ipsum pretium et. Praesent in fermentum nisi. Nullam tristique massa metus, ut sagittis ante sodales et.
-                </span>
-        </div>
-    </section>
-
-    <section id="prodetails" class="section2">
-        <div class="single-pro-image">
-            <img src="../img/ong/inst_caramelo.webp" width="50%" id="MainImg" alt="">
-        </div>
-        <div class="single-pro-details">
-                <h4>Instituto Caramelo</h4>
-                <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget tortor purus. In ut mi rutrum, ullamcorper ex et, dictum quam. 
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In blandit hendrerit lorem, eu 
-                    condimentum tellus egestas feugiat. Etiam lacinia quam nec mollis viverra. Cras ultricies eros turpis, sed efficitur tortor hendrerit nec. 
-                    Etiam nec nibh diam. Praesent vehicula purus ipsum, pharetra condimentum ipsum pretium et. Praesent in fermentum nisi. Nullam tristique massa metus, ut sagittis ante sodales et.
-                </span>
-        </div>
-    </section>
-
-    <section id="prodetails" class="section2">
-        <div class="single-pro-image">
-            <img src="../img/ong/focinhos.webp" width="50%" id="MainImg" alt="">
-        </div>
-        <div class="single-pro-details">
-                <h4>Focinhos de Luz</h4>
-                <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget tortor purus. In ut mi rutrum, ullamcorper ex et, dictum quam. 
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In blandit hendrerit lorem, eu 
-                    condimentum tellus egestas feugiat. Etiam lacinia quam nec mollis viverra. Cras ultricies eros turpis, sed efficitur tortor hendrerit nec. 
-                    Etiam nec nibh diam. Praesent vehicula purus ipsum, pharetra condimentum ipsum pretium et. Praesent in fermentum nisi. Nullam tristique massa metus, ut sagittis ante sodales et.
-                </span>
-        </div>
-    </section>
-
-    <section id="prodetails" class="section2">
-        <div class="single-pro-image">
-            <img src="../img/ong/amg_sfrancisco.webp" width="50%" id="MainImg" alt="">
-        </div>
-        <div class="single-pro-details">
-                <h4>Amigos de São Francisco</h4>
-                <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget tortor purus. In ut mi rutrum, ullamcorper ex et, dictum quam. 
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In blandit hendrerit lorem, eu 
-                    condimentum tellus egestas feugiat. Etiam lacinia quam nec mollis viverra. Cras ultricies eros turpis, sed efficitur tortor hendrerit nec. 
-                    Etiam nec nibh diam. Praesent vehicula purus ipsum, pharetra condimentum ipsum pretium et. Praesent in fermentum nisi. Nullam tristique massa metus, ut sagittis ante sodales et.
-                </span>
-        </div>
-    </section>
-
-    <section id="prodetails" class="section2">
-        <div class="single-pro-image">
-            <img src="../img/ong/gatopoles.webp" width="50%" id="MainImg" alt="">
-        </div>
-        <div class="single-pro-details">
-                <h4>Gatópoles - Adoção de Gatinhos</h4>
-                <span> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus eget tortor purus. In ut mi rutrum, ullamcorper ex et, dictum quam. 
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. In blandit hendrerit lorem, eu 
-                    condimentum tellus egestas feugiat. Etiam lacinia quam nec mollis viverra. Cras ultricies eros turpis, sed efficitur tortor hendrerit nec. 
-                    Etiam nec nibh diam. Praesent vehicula purus ipsum, pharetra condimentum ipsum pretium et. Praesent in fermentum nisi. Nullam tristique massa metus, ut sagittis ante sodales et.
-                </span>
-        </div>
-    </section>
-
-      
-
-    <footer class="section-p1">
-      <div class="col">
-          <img class="logo" src="../img/logo.webp" width="90" alt="">
-          <h4>Contato</h4>
-          <p><strong>Endereço:</strong> Rincão, SP</p>
-          <p><strong>Telefone:</strong>+55169999-9999 | +55169999-9999</p>
-          <div class="follow">
-              <h4>Nos siga</h4>
-              <div class="icon">
-                  <a href="https://www.linkedin.com/in/andersonluiscosta/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn de Anderson Luis Costa"><i class="fab fa-linkedin" aria-hidden="true"></i></a>
-                  <a href="https://github.com/andertrunks" target="_blank" rel="noopener noreferrer" aria-label="GitHub de Anderson Luis Costa"><i class="fab fa-github" aria-hidden="true"></i></a>
-                  <a href="https://www.facebook.com/andersonluis.costa" target="_blank" rel="noopener noreferrer" aria-label="Facebook de Anderson Luis Costa"><i class="fab fa-facebook" aria-hidden="true"></i></a>
-                  <a href="https://www.instagram.com/anderluiscosta/" target="_blank" rel="noopener noreferrer" aria-label="Instagram de Anderson Luis Costa"><i class="fab fa-instagram" aria-hidden="true"></i></a>
-                  <a href="https://x.com/anderluiscosta" target="_blank" rel="noopener noreferrer" aria-label="X de Anderson Luis Costa"><i class="fab fa-x-twitter" aria-hidden="true"></i></a>
-              </div>
-          </div>
-      </div>
-
-      <div class="col">
-          <h4>Sobre</h4>
-          <a href="#">Sobre Nós</a>
-          <a href="#">Perguntas Frequentes</a>
-          <a href="#">Política de Privacidade</a>
-          <a href="#">Termos & Condições</a>
-          <a href="#">Entre em contato</a>
-      </div>
-
-      <div class="col">
-          <h4>Colabore</h4>
-          <a href="#">Doe qualquer valor</a>
-          <a href="#">Seja uma Empresa Parceira</a>
-      </div>
-
-      <div class="copyright">
-          <p>&copy 2024, Todos os direitos reservados - Naju</p>
-      </div>
-  </footer>
-
+    <p class="disclaimer section-p1">A exibição destas referências não representa parceria formal nem validação institucional pelo Adota Pet.</p>
+  </main>
+  <footer class="section-p1"><div class="copyright"><p>&copy; 2026 Adota Pet. Projeto acadêmico.</p></div></footer>
   <script src="../js/darklight.js"></script>
-  </body>
+</body>
 </html>

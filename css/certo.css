@@ -669,3 +669,68 @@ body.light section {
       }
     }
 }
+
+/* Ajustes finais para páginas de confirmação */
+.trilho {
+  border: 1px solid #707770;
+  padding: 0;
+}
+
+:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 3px;
+}
+
+@media (max-width: 995px) {
+  header {
+    position: relative;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding-inline: 5%;
+  }
+
+  header nav,
+  header nav.active {
+    position: static;
+    display: flex !important;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px 16px;
+    justify-content: center;
+    padding: 8px 0;
+    border: 0;
+    background: transparent;
+  }
+
+  header nav a {
+    display: inline-block;
+    margin: 0;
+    color: inherit;
+    font-size: 1.5rem;
+  }
+
+  .mainbox {
+    width: min(100%, 600px);
+  }
+}
+
+@media (max-width: 640px) {
+  header nav a {
+    font-size: 1.2rem;
+  }
+
+  .mainbox {
+    height: 440px;
+  }
+
+  .mainbox .msg {
+    left: 5%;
+    width: 90%;
+    font-size: 1.25rem;
+  }
+
+  .section-p1,
+  footer {
+    padding-inline: 18px;
+  }
+}

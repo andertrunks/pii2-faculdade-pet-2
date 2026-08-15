@@ -26,14 +26,12 @@
         <a href="inicio.php" class="active"> Home </a>
         <a href="institucional2.html"> Institucional </a>
         <a href="ong2.html"> ONG's </a>
-        <a href="adote2.html"> Quero Adotar </a>
+        <a href="adote.php"> Quero Adotar </a>
         <a href="doar.php"> Quero Doar </a>
         <a href="denuncia.php"> Denuncia </a>
         <a href="logout.php"> Sair </a>
       </nav>
-      <div class="trilho" id="trilho">
-        <div class="indicador"></div>
-    </div>
+      <button type="button" class="trilho" id="trilho" aria-label="Alternar tema claro e escuro" aria-pressed="false"><span class="indicador" aria-hidden="true"></span></button>
     </header>
 
     <section class="home">
@@ -55,28 +53,29 @@
           <a href="https://x.com/anderluiscosta" target="_blank" rel="noopener noreferrer" aria-label="X de Anderson Luis Costa"><i class="fa-brands fa-x-twitter" aria-hidden="true"></i></a>
         </div>
         <div class="container1">
-          <a href="#" class="btn"> Vamos adotar? </a> <img src="../img/img-btn.gif" class="img-btn">
+          <a href="adote.php" class="btn"> Vamos adotar? </a>
+          <img src="../img/img-btn.gif" class="img-btn" alt="" aria-hidden="true">
         </div>
       </div>
     </section>
 
     <section id="feature" class="section-p1">
-      <div class="fe-box">
-          <img src="../img/features/denuncia_icone.webp" alt="denuncia">
+      <a class="fe-box" href="denuncia.php" aria-label="Denunciar maus-tratos">
+          <img src="../img/features/denuncia_icone.webp" alt="">
           <h6>Denuncie Maus Tratos</h6>
-      </div>
-      <div class="fe-box">
-        <img src="../img/features/localizacao.png" alt="validacao">
+      </a>
+      <a class="fe-box" href="ong2.html" aria-label="Localizar uma ONG próxima">
+        <img src="../img/features/localizacao.png" alt="">
         <h6>Localize uma ONG próxima a você</h6>
-      </div>
-      <div class="fe-box">
+      </a>
+      <a class="fe-box" href="adote.php" aria-label="Encontrar um pet para adoção">
         <img src="../img/features/pet1_icone.webp" alt="">
         <h6>Ache seu Pet</h6>
-      </div>
-      <div class="fe-box">
+      </a>
+      <a class="fe-box" href="adote.php" aria-label="Escolher um pet para iniciar a adoção">
         <img src="../img/features/pet2_icone.webp" alt="">
         <h6>Adoção Completa</h6>
-      </div>
+      </a>
     </section>
 
     <section class="container">
@@ -98,9 +97,7 @@
                       chance. A adoção é um ato de amor que transforma vidas, tanto a
                       do animal quanto a sua.
                   </p>
-                  <button class="information">
-                      Saiba Mais
-                  </button>
+                  <a class="information" href="adote.php">Saiba Mais</a>
               </div>
           </div>
 
@@ -119,9 +116,7 @@
                       Testemunhou ou suspeita de maus-tratos a animais? Não se cale! 
                       Denuncie e ajude a proteger aqueles que não podem se defender.
                   </p>
-                  <button class="information">
-                      Saiba Mais
-                  </button>
+                  <a class="information" href="denuncia.php">Saiba Mais</a>
               </div>
           </div>
 
@@ -141,17 +136,15 @@
                       resgatar, cuidar e encontrar lares para animais abandonados e 
                       maltratados.
                   </p>
-                  <button class="information">
-                      Saiba Mais
-                  </button>
+                  <a class="information" href="ong2.html">Saiba Mais</a>
               </div>
           </div>
       </div>
 
 
       <div class="arrows">
-          <button id="prev"><img src="../img/arrow.png" alt="seta esquerda"></button>
-          <button id="next"><img src="../img/arrow.png" alt="seta direita"></button>
+          <button id="prev" type="button" aria-label="Conteúdo anterior"><img src="../img/arrow.png" alt=""></button>
+          <button id="next" type="button" aria-label="Próximo conteúdo"><img src="../img/arrow.png" alt=""></button>
       </div>
 
       <div class="indicators">
@@ -176,7 +169,7 @@
         <img class="logo" src="../img/logo.webp" width="90" alt="">
         <h4>Contato</h4>
         <p><strong>Endereço:</strong> Rincão, SP</p>
-        <p><strong>Telefone:</strong>+55169999-9999 | +55169999-9999</p>
+        <p><strong>Atendimento:</strong> <a href="informacoes.html#contato">fale com a equipe</a></p>
         <div class="follow">
             <h4>Nos siga</h4>
             <div class="icon">
@@ -191,21 +184,21 @@
 
     <div class="col">
         <h4>Sobre</h4>
-        <a href="#">Sobre Nós</a>
-        <a href="#">Perguntas Frequentes</a>
-        <a href="#">Política de Privacidade</a>
-        <a href="#">Termos & Condições</a>
-        <a href="#">Entre em contato</a>
+        <a href="institucional.html">Sobre o projeto</a>
+        <a href="informacoes.html#faq">Perguntas frequentes</a>
+        <a href="informacoes.html#privacidade">Política de privacidade</a>
+        <a href="informacoes.html#termos">Termos de uso</a>
+        <a href="informacoes.html#contato">Entre em contato</a>
     </div>
 
     <div class="col">
         <h4>Colabore</h4>
-        <a href="#">Doe qualquer valor</a>
-        <a href="#">Seja uma Empresa Parceira</a>
+        <a href="login.php">Cadastre-se para colaborar</a>
+        <a href="informacoes.html#parcerias">Seja uma organização parceira</a>
     </div>
 
     <div class="copyright">
-        <p>&copy 2024, Todos os direitos reservados - Naju</p>
+        <p>&copy; 2026 Adota Pet. Projeto acadêmico.</p>
     </div>
 </footer>
 
