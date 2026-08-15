@@ -72,8 +72,11 @@ jobs:
           php-version: '8.3'
           extensions: pdo_mysql
 
-      - name: Migrar duas vezes para validar idempotência
-        run: php scripts/migrate.php && php scripts/migrate.php
+      - name: Migrar banco legado e validar idempotência
+        run: |
+          SCHEMA_DIR="$GITHUB_WORKSPACE/tests/fixtures/legacy" php scripts/migrate.php
+          php scripts/migrate.php
+          php scripts/migrate.php
 
       - name: Executar fluxos HTTP e persistência
         run: |
@@ -118,8 +121,11 @@ jobs:
           php-version: '8.3'
           extensions: pdo_pgsql
 
-      - name: Migrar duas vezes para validar idempotência
-        run: php scripts/migrate.php && php scripts/migrate.php
+      - name: Migrar banco legado e validar idempotência
+        run: |
+          SCHEMA_DIR="$GITHUB_WORKSPACE/tests/fixtures/legacy" php scripts/migrate.php
+          php scripts/migrate.php
+          php scripts/migrate.php
 
       - name: Executar fluxos HTTP e persistência
         run: |
@@ -145,4 +151,21 @@ jobs:
           test -n "$RENDER_DEPLOY_HOOK"
           curl --fail --silent --show-error \
             --retry 3 --retry-all-errors --max-time 30 \
-            --request POST "$RENDER_DEPLOY_HOOK"
+            --request POST "${RENDER_DEPLOY_HOOK}&ref=${GITHUB_SHA}"
+
+      - name: Confirmar revisão publicada
+        env:
+          PRODUCTION_HEALTH_URL: https://adota-pet-jdzq.onrender.com/health.php
+        run: |
+          for attempt in {1..80}; do
+            response="$(curl --fail --silent --show-error --max-time 20 "$PRODUCTION_HEALTH_URL" || true)"
+            revision="$(php -r '$data=json_decode($argv[1], true); echo is_array($data) ? ($data["revision"] ?? "") : "";' "$response")"
+            if [ "$revision" = "$GITHUB_SHA" ]; then
+              echo "Revisão $GITHUB_SHA confirmada em produção."
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "A revisão $GITHUB_SHA não apareceu em produção dentro de 20 minutos." >&2
+          exit 1
+

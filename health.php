@@ -10,9 +10,14 @@ header('Cache-Control: no-store');
 try {
     $pdo = create_database_connection();
     $pdo->query('SELECT 1');
-    echo json_encode(['status' => 'ok'], JSON_THROW_ON_ERROR);
+    $revision = trim((string) (getenv('RENDER_GIT_COMMIT') ?: getenv('APP_REVISION') ?: 'unknown'));
+    echo json_encode([
+        'status' => 'ok',
+        'revision' => $revision,
+    ], JSON_THROW_ON_ERROR);
 } catch (Throwable $exception) {
     error_log('Falha no health check: ' . $exception->getMessage());
     http_response_code(503);
     echo json_encode(['status' => 'unavailable']);
 }
+
