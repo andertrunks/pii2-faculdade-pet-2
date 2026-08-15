@@ -1,6 +1,6 @@
 # Adota Pet
 
-O Adota Pet é uma plataforma acadêmica de adoção responsável e proteção animal. O projeto reúne animais disponíveis, organizações de proteção, cadastro de doações, formulários de interesse em adoção e denúncias, com área autenticada para usuários.
+O Adota Pet é uma plataforma acadêmica de adoção responsável e proteção animal. O projeto reúne um catálogo persistido de animais, páginas individuais, organizações de referência, cadastro de doações, solicitações de adoção e denúncias, com área autenticada para usuários.
 
 ## Produção
 
@@ -39,6 +39,12 @@ docker compose up --build
 ```
 
 A aplicação fica disponível em `http://localhost:8080`. O Compose inicia o MySQL, espera o banco ficar saudável, cria as tabelas automaticamente e inicia o Apache.
+
+Para executar a mesma aplicação com PostgreSQL local:
+
+```bash
+docker compose -f docker-compose.postgres.yml up --build
+```
 
 Para encerrar:
 
@@ -81,7 +87,22 @@ php -S 127.0.0.1:8080
 
 ## Banco e migrações
 
-Os esquemas ficam em `database/schema.mysql.sql` e `database/schema.pgsql.sql`. Todos os `CREATE TABLE` usam `IF NOT EXISTS`, por isso a inicialização pode executar a migração mais de uma vez com segurança.
+Os esquemas iniciais ficam em `database/schema.mysql.sql` e `database/schema.pgsql.sql`. Evoluções ficam em `database/migrations/`, são registradas na tabela `schema_migrations` e podem ser executadas repetidamente com segurança. A migração atual preserva registros antigos ao adicionar relacionamentos opcionais nas tabelas já existentes; os novos fluxos sempre gravam esses relacionamentos.
+
+Modelo principal:
+
+```mermaid
+erDiagram
+    CADASTRO ||--o{ DOAR : registra
+    CADASTRO ||--o{ DENUNCIA : envia
+    CADASTRO ||--o{ ADOCAO : solicita
+    ANIMAIS ||--o{ ADOCAO : recebe
+```
+
+- `animais` guarda os dados exibidos no catálogo e na página individual;
+- `adocao.user_id` e `adocao.animal_id` associam cada solicitação ao usuário e animal corretos;
+- `doar.user_id` e `denuncia.user_id` registram a autoria autenticada;
+- o seed idempotente inclui oito animais e não duplica os registros em novas inicializações.
 
 O entrypoint aguarda o banco ficar disponível antes de iniciar o Apache. Para executar a migração manualmente:
 
@@ -100,7 +121,7 @@ O `render.yaml` versionado define somente um web service Free, sem banco tempor�
 5. Aplique o Blueprint. O health check será `GET /health.php`.
 6. Cadastre o deploy hook do Render no GitHub Actions como o segredo `RENDER_DEPLOY_HOOK`.
 
-O workflow `.github/workflows/deploy-render.yml` executa os smoke tests e o lint PHP em cada push na `main`. Somente após os testes passarem ele aciona o deploy hook secreto do Render. Isso mantém o autodeploy mesmo quando o serviço foi criado a partir da URL pública do repositório, que não recebe webhooks do GitHub.
+O workflow `.github/workflows/deploy-render.yml` executa qualidade estática e fluxos HTTP completos em MySQL e PostgreSQL em cada pull request. Em um push na `main`, o deploy hook secreto do Render só é acionado depois dos três jobs passarem. Isso mantém o autodeploy protegido por testes mesmo quando o serviço foi criado a partir da URL pública do repositório.
 
 Não selecione `Starter`, `Standard`, `Pro`, workspace pago ou trial. A configuração aprovada usa apenas o web service Free.
 
@@ -111,6 +132,8 @@ Execute o smoke test:
 ```bash
 php tests/smoke.php
 ```
+
+O teste `tests/e2e.php` é executado pela CI contra bancos efêmeros. Ele cadastra e autentica um usuário temporário, envia adoção, doação e denúncia, verifica os relacionamentos no banco e remove somente os registros criados pelo próprio teste.
 
 Valide a sintaxe de todos os arquivos PHP no PowerShell:
 
@@ -125,27 +148,29 @@ O endpoint `GET /health.php` testa a aplicação e a conexão com o banco. Ele r
 - credenciais somente por variáveis de ambiente e secrets do provedor;
 - PostgreSQL remoto protegido por TLS e channel binding quando fornecido;
 - senhas de usuários armazenadas com `password_hash`;
-- consultas preparadas em todos os fluxos de gravação e autenticação;
+- consultas preparadas em todos os fluxos de gravação, leitura parametrizada e autenticação;
 - validação de entrada e tokens CSRF nos formulários;
 - cookies de sessão `HttpOnly`, `SameSite=Lax` e `Secure` em HTTPS;
 - regeneração da sessão após login e limitação de tentativas;
 - erros públicos sem detalhes de conexão ou SQL;
 - PHP sem exposição de versão e com `display_errors=Off`;
-- cabeçalhos HTTP de segurança e listagem de diretórios desativada.
+- cabeçalhos HTTP de segurança, política CSP e listagem de diretórios desativada;
+- login social decorativo removido: a aplicação anuncia somente o método de email e senha que realmente implementa.
 
 ## Estrutura
 
 ```text
 components/       páginas, autenticação e rotinas PHP
 css/              estilos da aplicação
-database/         esquemas MySQL e PostgreSQL
+database/         esquemas MySQL/PostgreSQL, migrações versionadas e seed
 docker/           configuração do Apache, PHP e entrypoint
 img/              imagens e recursos visuais
 js/               interações da interface
 scripts/          migrações e utilitários
-tests/            smoke tests sem dependências externas
+tests/            smoke tests e fluxo HTTP ponta a ponta
 Dockerfile        imagem PHP 8.3 + Apache
 docker-compose.yml ambiente local com MySQL
+docker-compose.postgres.yml ambiente local equivalente com PostgreSQL
 render.yaml       web service Free e secret não sincronizado
 ```
 

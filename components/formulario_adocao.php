@@ -1,5 +1,11 @@
 <?php
 require_once __DIR__ . '/verifica.php';
+require_once __DIR__ . '/AnimalRepository.php';
+$animalId = filter_var($_GET['animal_id'] ?? null, FILTER_VALIDATE_INT);
+$animal = $animalId === false || $animalId < 1 ? null : (new AnimalRepository($pdo))->find($animalId);
+if ($animal === null || (string) $animal['status'] !== 'disponivel') {
+    redirect_with_flash('adote.php', 'error', 'Escolha um animal disponível antes de preencher o formulário.');
+}
 $flash = flash_take();
 ?>
 <!DOCTYPE html>
@@ -30,14 +36,12 @@ $flash = flash_take();
         <a href="inicio.php"> Home </a>
         <a href="institucional2.html"> Institucional </a>
         <a href="ong2.html"> ONG's </a>
-        <a href="adote2.html" class="active"> Quero Adotar </a>
+        <a href="adote.php" class="active"> Quero Adotar </a>
         <a href="doar.php"> Quero Doar </a>
         <a href="denuncia.php"> Denuncia </a>
         <a href="logout.php"> Sair </a>
       </nav>
-      <div class="trilho" id="trilho">
-        <div class="indicador"></div>
-      </div>
+      <button type="button" class="trilho" id="trilho" aria-label="Alternar tema claro e escuro" aria-pressed="false"><span class="indicador" aria-hidden="true"></span></button>
     </header>
 
     <section class="container">
@@ -45,7 +49,7 @@ $flash = flash_take();
 
           <div class="item active">
               <div class="animal-img">
-                  <img src="../img/pets.png" alt="">
+                  <img src="<?= escape_html((string) $animal['imagem']) ?>" alt="<?= escape_html((string) $animal['nome']) ?>, animal escolhido para adoção">
               </div>
               <div class="content">
                   <p class="animal-information">
@@ -68,12 +72,12 @@ $flash = flash_take();
     <main id="form_container">
       <div id="form_header">
         <h1 id="form_title">
-          Formulário para adoção
+          Solicitação para adotar <?= escape_html((string) $animal['nome']) ?>
         </h1>
       </div>
 
       <form action="recebe_form.php" method="POST">
-        <input type="hidden" name="hidden" value="1">
+        <input type="hidden" name="animal_id" value="<?= (int) $animal['id_animal'] ?>">
         <input type="hidden" name="csrf_token" value="<?= escape_html(csrf_token()) ?>">
         <?= render_flash_message($flash) ?>
         <div id="input_container">
@@ -86,7 +90,7 @@ $flash = flash_take();
         </div>
 
           <div class="input-box">
-            <label for="tel" class="form-label">Telefone</label>
+            <label for="telefone" class="form-label">Telefone</label>
           <div class="input-field">
             <input type="tel" name="telefone" id="telefone" class="form-control" autocomplete="tel" maxlength="25" required>
             <i class="fa-solid fa-paw"></i>
@@ -194,7 +198,7 @@ $flash = flash_take();
           <img class="logo" src="../img/logo.webp" width="90" alt="">
           <h4>Contato</h4>
           <p><strong>Endereço:</strong> Rincão, SP</p>
-          <p><strong>Telefone:</strong>+55169999-9999 | +55169999-9999</p>
+          <p><strong>Atendimento:</strong> <a href="informacoes.html#contato">fale com a equipe</a></p>
           <div class="follow">
               <h4>Nos siga</h4>
               <div class="icon">
@@ -209,21 +213,21 @@ $flash = flash_take();
 
       <div class="col">
           <h4>Sobre</h4>
-          <a href="#">Sobre Nós</a>
-          <a href="#">Perguntas Frequentes</a>
-          <a href="#">Política de Privacidade</a>
-          <a href="#">Termos & Condições</a>
-          <a href="#">Entre em contato</a>
+          <a href="institucional.html">Sobre o projeto</a>
+          <a href="informacoes.html#faq">Perguntas frequentes</a>
+          <a href="informacoes.html#privacidade">Política de privacidade</a>
+          <a href="informacoes.html#termos">Termos de uso</a>
+          <a href="informacoes.html#contato">Entre em contato</a>
       </div>
 
       <div class="col">
           <h4>Colabore</h4>
-          <a href="#">Doe qualquer valor</a>
-          <a href="#">Seja uma Empresa Parceira</a>
+          <a href="login.php">Cadastre-se para colaborar</a>
+          <a href="informacoes.html#parcerias">Seja uma organização parceira</a>
       </div>
 
       <div class="copyright">
-          <p>&copy 2024, Todos os direitos reservados - Naju</p>
+          <p>&copy; 2026 Adota Pet. Projeto acadêmico.</p>
       </div>
     </footer>
 

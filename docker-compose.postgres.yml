@@ -1,0 +1,34 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: 8080
+      RUN_MIGRATIONS: 1
+      DB_DRIVER: pgsql
+      DB_HOST: database
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME:-adota_pet}
+      DB_USER: ${DB_USER:-adota_pet}
+      DB_PASS: ${DB_PASS:-adota_pet_dev}
+    depends_on:
+      database:
+        condition: service_healthy
+
+  database:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${DB_NAME:-adota_pet}
+      POSTGRES_USER: ${DB_USER:-adota_pet}
+      POSTGRES_PASSWORD: ${DB_PASS:-adota_pet_dev}
+    volumes:
+      - adota_pet_postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-adota_pet} -d ${DB_NAME:-adota_pet}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  adota_pet_postgres:

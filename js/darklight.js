@@ -6,6 +6,7 @@ function applyTheme(isLight) {
   themeToggle?.classList.toggle('light', isLight);
   pageBody?.classList.toggle('light', isLight);
   themedSections.forEach((section) => section.classList.toggle('light', isLight));
+  themeToggle?.setAttribute('aria-pressed', String(isLight));
 }
 
 function getSavedTheme() {

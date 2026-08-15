@@ -103,11 +103,14 @@ nav a.active{
 }
 
 .home{
-  top: 90px;
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 8rem;
+  min-height: calc(100vh - 9rem);
+  height: auto;
+  padding-top: 4rem;
+  padding-bottom: 6rem;
   background-color: #fff;
   transition: .5s;
 }
@@ -192,6 +195,14 @@ span{
   box-shadow: 0 0 25px #ca6512;
 }
 
+.btn:focus-visible,
+#feature .fe-box:focus-visible,
+.information:focus-visible,
+.arrows button:focus-visible {
+  outline: 3px solid #ca6512;
+  outline-offset: 4px;
+}
+
 .container1 {
   display: flex;
   justify-content: left;
@@ -256,7 +267,10 @@ span{
 @media (max-width: 995px){
   .home{
     flex-direction: column;
-    margin: 5rem 4rem;
+    gap: 3rem;
+    min-height: 0;
+    margin: 0;
+    padding: 4rem;
   }
 
   .home.home-content h3{
@@ -282,9 +296,13 @@ span{
 }
 
 section {
-  height: 65vh;
   padding: 5rem 9% 5rem;
   position: relative;
+}
+
+section.container {
+  height: 65vh;
+  min-height: 520px;
 
   & .list {
       width: 70vw;
@@ -295,6 +313,7 @@ section {
       & .item {
           position: absolute;
           inset: 0;
+          pointer-events: none;
 
           & .animal-img {
               position: absolute;
@@ -339,6 +358,9 @@ section {
               }
 
               & .information {
+                  display: inline-flex;
+                  align-items: center;
+                  justify-content: center;
                   border-radius: 30px;
                   height: 35px;
                   width: 120px;
@@ -349,6 +371,11 @@ section {
                   cursor: pointer;
                   font-weight: bold;
                   font-family: 'Poppins', sans-serif;
+              }
+
+              & .information:hover {
+                  background-color: #df8740;
+                  color: #000000;
               }
           }
 
@@ -367,6 +394,8 @@ section {
   .arrows {
       width: 70vw;
       position: absolute;
+      z-index: 2;
+      pointer-events: none;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -25px);
@@ -380,6 +409,7 @@ section {
       }
 
       & button {
+          pointer-events: auto;
           top: 60%;
           width: 50px;
           height: 50px;
@@ -401,6 +431,7 @@ section {
 
   .indicators {
       position: absolute;
+      pointer-events: none;
       top: 50%;
       left: 50%;
       transform: translateX(-50%);
@@ -436,7 +467,7 @@ section {
   }
 }
 
-section {
+section.container {
 
   & .list {
   --calculation: 1;
@@ -485,6 +516,8 @@ section {
           transform: translateX(0);
           transition: 0.5s;
           opacity: 1;
+          z-index: 1;
+          pointer-events: auto;
 
           & .content {
 
@@ -511,11 +544,17 @@ section {
 #feature{
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
+  gap: 3rem;
   flex-wrap: wrap;
+  height: auto;
+  min-height: 0;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 }
 
 #feature .fe-box{
+  display: block;
   width: 180px;
   text-align: center;
   padding: 25px 15px;
@@ -523,10 +562,14 @@ section {
   border: 1px solid #cce7d0;
   border-radius: 4px;
   margin: 15px 0;
+  color: inherit;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 #feature .fe-box:hover{
   box-shadow: 10px 10px 54px rgba(70, 62, 221, 0.1);
+  transform: translateY(-4px);
 }
 
 #feature .fe-box img{
@@ -728,7 +771,7 @@ body.light .number{
   color: #fff;
 }
 
-body.light section {
+body.light section.container {
   & .list {
       & .item {
           & .content {
@@ -749,4 +792,88 @@ body.light section {
           border-top: 1px solid #fff;
       }
     }
+}
+
+/* Ajustes finais de navegação, foco e responsividade */
+.trilho {
+  border: 1px solid #707770;
+  padding: 0;
+}
+
+:focus-visible {
+  outline: 3px solid #005fcc;
+  outline-offset: 3px;
+}
+
+@media (max-width: 995px) {
+  header {
+    position: relative;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding-inline: 5%;
+  }
+
+  header nav,
+  header nav.active {
+    position: static;
+    display: flex !important;
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    justify-content: center;
+    padding: 8px 0;
+    border: 0;
+    background: transparent;
+  }
+
+  header nav a {
+    display: inline-block;
+    margin: 0;
+    color: inherit;
+    font-size: 1.55rem;
+  }
+
+  .home {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .home-img {
+    order: -1;
+  }
+
+  .home-img img {
+    width: min(62vw, 360px);
+  }
+
+  .social-icons {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 640px) {
+  header nav {
+    gap: 7px 12px;
+  }
+
+  header nav a {
+    font-size: 1.25rem;
+  }
+
+  section.container {
+    min-height: 610px;
+  }
+
+  #feature {
+    padding-inline: 18px;
+  }
+
+  #feature .fe-box {
+    width: min(100%, 300px);
+  }
+
+  .section-p1,
+  footer {
+    padding-inline: 18px;
+  }
 }

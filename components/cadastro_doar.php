@@ -23,8 +23,8 @@ try {
     }
 
     $statement = $pdo->prepare(
-        'INSERT INTO doar (nome_pet, idade_pet, nome, telefone, email, cep, cidade, uf, sobre)
-         VALUES (:nome_pet, :idade_pet, :nome, :telefone, :email, :cep, :cidade, :uf, :sobre)'
+        'INSERT INTO doar (nome_pet, idade_pet, nome, telefone, email, cep, cidade, uf, sobre, user_id)
+         VALUES (:nome_pet, :idade_pet, :nome, :telefone, :email, :cep, :cidade, :uf, :sobre, :user_id)'
     );
     $statement->execute([
         'nome_pet' => $nomePet,
@@ -36,6 +36,7 @@ try {
         'cidade' => $cidade,
         'uf' => $uf,
         'sobre' => $sobre,
+        'user_id' => $userId,
     ]);
 
     header('Location: certo.html', true, 303);
