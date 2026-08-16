@@ -103,16 +103,19 @@ nav a.active{
 }
 
 .home{
-  display: flex;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.15fr);
   align-items: center;
-  gap: 8rem;
-  min-height: calc(100vh - 9rem);
-  height: auto;
-  padding-top: 4rem;
-  padding-bottom: 6rem;
+  gap: clamp(3rem, 6vw, 8rem);
+  min-height: 0;
+  padding: clamp(3rem, 5vw, 6rem) 9% clamp(5rem, 7vw, 8rem);
   background-color: #fff;
   transition: .5s;
+}
+
+.home-content{
+  min-width: 0;
+  max-width: 720px;
 }
 
 .home-content h1{
@@ -136,12 +139,17 @@ span{
 }
 
 .home-img{
+  display: flex;
+  justify-content: center;
   border-radius: 50%;
 }
 
 .home-img img{
   position: relative;
-  width: 32vw;
+  display: block;
+  width: min(32vw, 440px);
+  max-width: 100%;
+  height: auto;
   border-radius: 50%;
   box-shadow: 0 0 25px solid #ca6512;
   cursor: pointer;
@@ -153,6 +161,25 @@ span{
   font-weight: 500;
 }
 
+.home-highlights{
+  margin-top: 1rem;
+  padding-left: 2rem;
+}
+
+.home-actions{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.4rem;
+  margin-top: 2rem;
+}
+
+.social-icons{
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
 .social-icons a{
   display: inline-flex;
   justify-content: center;
@@ -160,10 +187,10 @@ span{
   width: 4rem;
   height: 4rem;
   background-color: transparent;
-  border: 0.2 rem solid #ca6512;;
+  border: 0.2rem solid #ca6512;
   font-size: 2rem;
   border-radius: 50%;
-  margin: 3rem 1.5rem 3rem 0;
+  margin: 0;
   transition: 0.3s ease;
   color: #ca6512;
 }
@@ -204,13 +231,8 @@ span{
 }
 
 .container1 {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-}
-
-.img-btn{
-  width: 5vw;
+  display: block;
+  margin: 0;
 }
 
 .typing-text{
@@ -258,19 +280,28 @@ span{
   }
 }
 
-@media (max-width: 1000px){
-  .home{
-    gap: 4rem;
-  }
-}
-
 @media (max-width: 995px){
   .home{
-    flex-direction: column;
+    grid-template-columns: 1fr;
     gap: 3rem;
     min-height: 0;
     margin: 0;
-    padding: 4rem;
+    padding: 3rem 5% 5rem;
+    text-align: center;
+  }
+
+  .home-content{
+    max-width: 760px;
+    margin: 0 auto;
+  }
+
+  .home-highlights{
+    display: inline-block;
+    text-align: left;
+  }
+
+  .home-actions{
+    align-items: center;
   }
 
   .home.home-content h3{
@@ -282,8 +313,7 @@ span{
   }
 
   .home-img img{
-    width: 70vw;
-    margin-top: 4rem;
+    width: min(62vw, 360px);
   }
 }
 
@@ -542,26 +572,30 @@ section.container {
 }
 
 #feature{
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(160px, 220px));
   justify-content: center;
-  gap: 3rem;
-  flex-wrap: wrap;
+  align-items: stretch;
+  gap: clamp(1.6rem, 3vw, 3rem);
+  max-width: 1200px;
+  margin: 0 auto;
   height: auto;
   min-height: 0;
-  padding-top: 4rem;
-  padding-bottom: 4rem;
+  padding: 4rem 5%;
 }
 
 #feature .fe-box{
-  display: block;
-  width: 180px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  min-height: 290px;
   text-align: center;
   padding: 25px 15px;
   box-shadow: 20px 20px 34px rgba(0, 0, 0, 0.03);
   border: 1px solid #cce7d0;
   border-radius: 4px;
-  margin: 15px 0;
+  margin: 0;
   color: inherit;
   cursor: pointer;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -573,7 +607,10 @@ section.container {
 }
 
 #feature .fe-box img{
-  width: 100%;
+  width: 150px;
+  max-width: 100%;
+  height: 170px;
+  object-fit: contain;
   margin-bottom: 10px;
 }
 
@@ -585,6 +622,7 @@ section.container {
   color: #041e42;
   background-color: #fddde4;
   font-size: 12px;
+  margin-top: auto;
 }
 
 #feature .fe-box:nth-child(2) h6{
@@ -849,6 +887,10 @@ body.light section.container {
   .social-icons {
     justify-content: center;
   }
+
+  #feature {
+    grid-template-columns: repeat(2, minmax(160px, 260px));
+  }
 }
 
 @media (max-width: 640px) {
@@ -865,11 +907,12 @@ body.light section.container {
   }
 
   #feature {
+    grid-template-columns: minmax(0, 300px);
     padding-inline: 18px;
   }
 
   #feature .fe-box {
-    width: min(100%, 300px);
+    width: 100%;
   }
 
   .section-p1,
