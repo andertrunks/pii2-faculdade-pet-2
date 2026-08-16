@@ -138,6 +138,18 @@ foreach (['components/index.html', 'components/inicio.php'] as $relativePath) {
         !str_contains($content, 'href="#" class="btn"'),
         "Chamada principal sem destino em {$relativePath}."
     );
+    check(
+        str_contains($content, 'class="home-actions"'),
+        "Bloco de acoes do destaque ausente em {$relativePath}."
+    );
+    check(
+        !str_contains($content, 'img-btn.gif'),
+        "Imagem decorativa ainda pode cobrir a chamada principal em {$relativePath}."
+    );
+    check(
+        str_contains($content, 'index.css?v=20260816-1'),
+        "Versao do CSS ausente em {$relativePath}."
+    );
 
     foreach ($socialProfiles as $network => $url) {
         $needle = '<a href="' . $url . '" target="_blank" rel="noopener noreferrer" aria-label="'
@@ -175,6 +187,12 @@ $dockerfile = file_get_contents($projectRoot . '/Dockerfile');
 check(str_contains((string) $dockerfile, 'HEALTHCHECK'), 'HEALTHCHECK do contêiner ausente.');
 check(str_contains((string) $dockerfile, 'ServerName localhost'), 'ServerName global do Apache ausente.');
 
+$apacheConfig = (string) file_get_contents($projectRoot . '/docker/000-default.conf');
+check(
+    str_contains($apacheConfig, 'Cache-Control "no-store, no-cache, must-revalidate, max-age=0"'),
+    'Cache antigo ainda pode ocultar novas versoes da interface.'
+);
+
 $mysqlSchema = (string) file_get_contents($projectRoot . '/database/schema.mysql.sql');
 $pgsqlSchema = (string) file_get_contents($projectRoot . '/database/schema.pgsql.sql');
 foreach ([$mysqlSchema, $pgsqlSchema] as $schema) {
@@ -192,6 +210,12 @@ check(str_contains($adoptionHandler, 'animal_id'), 'Adoção não registra o ani
 check(str_contains($adoptionHandler, 'user_id'), 'Adoção não registra o usuário autenticado.');
 
 $indexCss = file_get_contents($projectRoot . '/css/index.css');
+check(
+    str_contains((string) $indexCss, 'grid-template-columns: minmax(280px, 0.85fr) minmax(0, 1.15fr)'),
+    'Layout principal nao usa colunas responsivas.'
+);
+check(str_contains((string) $indexCss, '.home-actions'), 'Acoes do destaque nao possuem fluxo proprio.');
+check(!str_contains((string) $indexCss, '.img-btn'), 'Imagem decorativa obsoleta ainda interfere no layout.');
 check(substr_count((string) $indexCss, 'overflow-x: hidden') >= 2, 'Proteção contra overflow horizontal ausente.');
 check(str_contains((string) $indexCss, 'section.container'), 'Estilos do carrossel não estão isolados.');
 check(
